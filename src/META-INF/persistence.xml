@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="MDAfondationPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>ejb.CTPcombo</class>
+    <class>ejb.Client</class>
+    <class>ejb.Company</class>
+    <class>ejb.Logs</class>
+    <class>ejb.Participant</class>
+    <class>ejb.ParticipantTeam</class>
+    <class>ejb.ParticipantView</class>
+    <class>ejb.ParticipatingCompanyMember</class>
+    <class>ejb.Project</class>
+    <class>ejb.TTrainerEvaluation</class>
+    <class>ejb.Team</class>
+    <class>ejb.TopicsCombo</class>
+    <class>ejb.TopicsCovered</class>
+    <class>ejb.Trainer</class>
+    <class>ejb.TrainerContact</class>
+    <class>ejb.TrainerTeamCombo</class>
+    <class>ejb.TrainersByTp</class>
+    <class>ejb.TrainersTeam</class>
+    <class>ejb.Training</class>
+    <class>ejb.TrainingProcess</class>
+    <class>ejb.TrainingProject</class>
+    <class>ejb.TrainingView</class>
+    <class>ejb.Users</class>
+    <class>ejb.view.ReportMonth</class>
+    <class>ejb.view.ReportTrainer</class>
+    <class>ejb.view.ReportTrainerEvaluation</class>
+    <class>ejb.view.ReportTrainingProcess</class>
+    <class>ejb.view.ReportYear</class>
+    <class>ejb.view.TestAdmin</class>
+  </persistence-unit>
+</persistence>
