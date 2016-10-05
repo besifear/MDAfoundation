@@ -52,6 +52,7 @@ public interface TrainingProcessInterface {
      List<TrainingProcess> findByTopicsAsc(String emriI);
      List<TrainingProcess> findByTopicsDes(String emriI);
      TrainingProcess findByEverything(TrainingProcess tp);
+     List<TrainingProcess> findByYear(int i);
      List<TrainingProcess> findBy2013();
      List<TrainingProcess> findBy2014();
      List<TrainingProcess> findBy2015();

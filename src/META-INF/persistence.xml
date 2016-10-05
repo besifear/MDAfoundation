@@ -31,5 +31,11 @@
     <class>ejb.view.ReportTrainingProcess</class>
     <class>ejb.view.ReportYear</class>
     <class>ejb.view.TestAdmin</class>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://localhost:1433;databaseName=MDAfondation"/>
+      <property name="javax.persistence.jdbc.user" value="sa"/>
+      <property name="javax.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+      <property name="javax.persistence.jdbc.password" value=""/>
+    </properties>
   </persistence-unit>
 </persistence>

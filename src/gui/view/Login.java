@@ -221,11 +221,11 @@ public class Login extends javax.swing.JFrame {
   
     public static void main(String args[])throws Exception {
         
-        Splash s=new Splash();
+        /*Splash s=new Splash();
                 s.setVisible(true);
                 Thread t=Thread.currentThread();
                 t.sleep(4000);
-                s.dispose();
+                s.dispose();*/
                 
         
         java.awt.EventQueue.invokeLater(new Runnable() {

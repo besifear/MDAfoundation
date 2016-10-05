@@ -18,7 +18,7 @@ public class Splash extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setUndecorated(true);
-        img = new ImageIcon(getClass().getResource("/Photos/MDASplash.png"));
+        img = new ImageIcon(getClass().getResource("/Photos/MDA-Splash2.png"));
         imglabel = new JLabel(img);
         add(imglabel);
         setLayout(null);

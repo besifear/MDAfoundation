@@ -61,6 +61,7 @@ import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -190,7 +191,7 @@ Users useri;
     }
     
     
-    private void exportExcel() throws IOException{
+    private void exportExcel(String directory) throws IOException{
         XSSFWorkbook wb=new XSSFWorkbook();
         XSSFSheet ws=wb.createSheet();
         TableModel tm=tbl.getModel();
@@ -298,7 +299,7 @@ Users useri;
         }*/
         try{
             FileOutputStream fos;
-            fos = new FileOutputStream(new File(emertoFilin(tbl)+".xlsx"));
+            fos = new FileOutputStream(new File(directory+emertoFilin(tbl)+".xlsx"));
              
             wb.write(fos);
             fos.close();
@@ -485,16 +486,35 @@ Users useri;
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-         try {
+        JFileChooser chooser = new JFileChooser(); 
+        chooser.setCurrentDirectory(new java.io.File("."));
+        chooser.setDialogTitle("Chooser");
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        String directory="";
+        //
+        // disable the "All files" option.
+        //
+        chooser.setAcceptAllFileFilterUsed(false);
+        //    
+        if(chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
+            
+            directory=chooser.getSelectedFile().toString()+"\\";
+            
+            try {
              if(tbl.getModel()==pvtm||tbl.getModel()==tvtm||tbl.getModel()==rmvtm||tbl.getModel()==rtevvtm||tbl.getModel()==ryvtm||tbl.getModel()==rtvtm||tbl.getModel()==rtpvtm){
-            exportExcel();
+            exportExcel(directory);
              }
              else{
                  JOptionPane.showMessageDialog(null,"Gjeneroni njeren nga tabelat!!");
              }
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null,"IOException");
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null,"IOException");
+            }
         }
+        else{
+            JOptionPane.showMessageDialog(null, "Duhet te zgjedhni lokacionin se ku deshironi te ruani file !");
+        }
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
 

@@ -81,11 +81,15 @@ import org.jfree.chart.ChartFrame;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.labels.ItemLabelAnchor;
+import org.jfree.chart.labels.ItemLabelPosition;
+import org.jfree.chart.labels.StandardCategoryItemLabelGenerator;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.ui.TextAnchor;
 
 public class Kerko extends javax.swing.JInternalFrame {
     
@@ -344,6 +348,7 @@ public class Kerko extends javax.swing.JInternalFrame {
 
         setClosable(true);
         setTitle("KËRKO");
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -655,18 +660,7 @@ public class Kerko extends javax.swing.JInternalFrame {
 
         jTabbedPane1.addTab("Statistika", jPanel5);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 514, Short.MAX_VALUE)
-                .addGap(0, 0, 0))
-        );
+        getContentPane().add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 518));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -1612,10 +1606,11 @@ public class Kerko extends javax.swing.JInternalFrame {
         if(statsbycombo.getSelectedItem().equals("Numri i trajnimeve")){
         DefaultCategoryDataset dataset=new DefaultCategoryDataset();
            
-         int countTrainingProcess2013=trainingir.findBy2013().size();
-         int countTrainingProcess2014=trainingir.findBy2014().size();
-         int countTrainingProcess2015=trainingir.findBy2015().size();
-         int countTrainingProcess2016=trainingir.findBy2016().size();
+         int countTrainingProcess2013=trainingir.findByYear(2013).size();
+         int countTrainingProcess2014=trainingir.findByYear(2014).size();
+         int countTrainingProcess2015=trainingir.findByYear(2015).size();
+         int countTrainingProcess2016=trainingir.findByYear(2016).size();
+         int countTrainingProcess2017=trainingir.findByYear(2017).size();
          
          
          
@@ -1623,10 +1618,16 @@ public class Kerko extends javax.swing.JInternalFrame {
         dataset.setValue(countTrainingProcess2014, "Trajnime","2014");
         dataset.setValue(countTrainingProcess2015, "Trajnime","2015");
         dataset.setValue(countTrainingProcess2016, "Trajnime","2016");
-        
+        dataset.setValue(countTrainingProcess2017, "Trajnime","2017");
         JFreeChart chart=ChartFactory.createBarChart("Numri i trajnimeve ndër vite", "Viti", "Numri i trajnimeve", dataset, PlotOrientation.VERTICAL, false, true, false);
         CategoryPlot p=chart.getCategoryPlot();
         p.setRangeGridlinePaint(Color.black);
+        final BarRenderer renderer = (BarRenderer) p.getRenderer();
+        renderer.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
+        renderer.setBaseItemLabelsVisible(true);
+        final NumberAxis rangeAxis = (NumberAxis) p.getRangeAxis();
+        rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+        chart.getCategoryPlot().setRenderer(renderer);
         ChartFrame frame=new ChartFrame("Frame per barchart",chart);
         frame.setVisible(true);
         frame.setSize(800,500);
@@ -1638,6 +1639,7 @@ public class Kerko extends javax.swing.JInternalFrame {
         List <TTrainerEvaluation> trainerevs2=trainerevir.findByTPDate(2014);
         List <TTrainerEvaluation> trainerevs3=trainerevir.findByTPDate(2015);
         List <TTrainerEvaluation> trainerevs4=trainerevir.findByTPDate(2016);
+        List <TTrainerEvaluation> trainerevs5=trainerevir.findByTPDate(2017);
         
         int tev20131=0;
         int tev20132=0;
@@ -1659,6 +1661,10 @@ public class Kerko extends javax.swing.JInternalFrame {
         int tev20163=0;
         int tev20164=0;
         
+        int tev20171=0;
+        int tev20172=0;
+        int tev20173=0;
+        int tev20174=0;
        
            
         for(int i=0;i<trainerevs1.size();i++){
@@ -1697,15 +1703,26 @@ public class Kerko extends javax.swing.JInternalFrame {
             tev20163=tev20163+trainerpres;
         }
         
+        for(int i=0;i<trainerevs5.size();i++){
+            int trainerprep=trainerevs5.get(i).getTrainerPreperation();
+            int trainerdisc=trainerevs5.get(i).getTrainerDiscussion();
+            int trainerpres=trainerevs5.get(i).getPresentation();
+            tev20171=tev20171+trainerprep;
+            tev20172=tev20172+trainerdisc;
+            tev20173=tev20173+trainerpres;
+        }
+        
         double tevavg2013=0;
         double tevavg2014=0;
         double tevavg2015=0;
         double tevavg2016=0;
+        double tevavg2017=0;
         
         double tot1=(tev20131+tev20132+tev20133)/3;
         double tot2=(tev20141+tev20142+tev20143)/3;
         double tot3=(tev20151+tev20152+tev20153)/3;
         double tot4=(tev20161+tev20162+tev20163)/3;
+        double tot5=(tev20171+tev20172+tev20173)/3;
         
         tevavg2013=(double)tot1/trainerevs1.size();
             /*BigDecimal bd1 = new BigDecimal(tevavg2013).setScale(2, RoundingMode.HALF_EVEN);
@@ -1722,6 +1739,7 @@ public class Kerko extends javax.swing.JInternalFrame {
         tevavg2016=(double)tot4/trainerevs4.size();
             /*BigDecimal bd4 = new BigDecimal(tevavg2016).setScale(2, RoundingMode.HALF_EVEN);
             tevavg2016 = bd4.doubleValue();   */
+        tevavg2017=(double)tot5/trainerevs4.size();
             
         String te1="Përgaditja";
         String te2="Diskutimi";
@@ -1731,6 +1749,7 @@ public class Kerko extends javax.swing.JInternalFrame {
         String v2="2014";
         String v3="2015";
         String v4="2016";
+        String v5="2017";
          
         dataset.setValue((double)tev20131/trainerevs1.size(), te1, v1);
         dataset.setValue((double)tev20132/trainerevs1.size(), te2, v1);
@@ -1747,6 +1766,10 @@ public class Kerko extends javax.swing.JInternalFrame {
         dataset.setValue((double)tev20161/trainerevs4.size(), te1, v4);
         dataset.setValue((double)tev20162/trainerevs4.size(), te2, v4);
         dataset.setValue((double)tev20163/trainerevs4.size(), te3, v4);
+        
+        dataset.setValue((double)tev20171/trainerevs5.size(), te1, v5);
+        dataset.setValue((double)tev20172/trainerevs5.size(), te2, v5);
+        dataset.setValue((double)tev20173/trainerevs5.size(), te3, v5);
          
         /*dataset.setValue(tevavg2013, "Vlerësimi mesatar","2013");
         dataset.setValue(tevavg2014, "Vlerësimi mesatar","2014");
@@ -1770,6 +1793,7 @@ public class Kerko extends javax.swing.JInternalFrame {
          int countParticipant2014=participantir.findByTPDate(2014).size();
          int countParticipant2015=participantir.findByTPDate(2015).size();
          int countParticipant2016=participantir.findByTPDate(2016).size();
+         int countParticipant2017=participantir.findByTPDate(2017).size();
          
          
          
@@ -1777,10 +1801,17 @@ public class Kerko extends javax.swing.JInternalFrame {
         datas.setValue(countParticipant2014, "Pjesmarrës","2014");
         datas.setValue(countParticipant2015, "Pjesmarrës","2015");
         datas.setValue(countParticipant2016, "Pjesmarrës","2016");
+        datas.setValue(countParticipant2017, "Pjesmarrës","2017");
         
         JFreeChart chart=ChartFactory.createBarChart("Numri i pjesmarrësve ndër vite", "Viti", "Numri i pjesmarrësve", datas, PlotOrientation.VERTICAL, false, true, false);
         CategoryPlot p=chart.getCategoryPlot();
         p.setRangeGridlinePaint(Color.black);
+        final BarRenderer renderer = (BarRenderer) p.getRenderer();
+        renderer.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
+        renderer.setBaseItemLabelsVisible(true);
+        final NumberAxis rangeAxis = (NumberAxis) p.getRangeAxis();
+        rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+        chart.getCategoryPlot().setRenderer(renderer);
         ChartFrame frame=new ChartFrame("Frame per barchart",chart);
         frame.setVisible(true);
         frame.setSize(800,500);
@@ -1895,7 +1926,7 @@ public class Kerko extends javax.swing.JInternalFrame {
 
         // set the range axis to display integers only...
         final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-        rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+        rangeAxis.setStandardTickUnits(NumberAxis.createStandardTickUnits());
 
         // disable bar outlines...
         final BarRenderer renderer = (BarRenderer) plot.getRenderer();
@@ -1917,7 +1948,11 @@ public class Kerko extends javax.swing.JInternalFrame {
         renderer.setSeriesPaint(0, gp0);
         renderer.setSeriesPaint(1, gp1);
         renderer.setSeriesPaint(2, gp2);
-
+        
+        //renderer.setBasePositiveItemLabelPosition(new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12,TextAnchor.TOP_CENTER  ));
+        renderer.setBaseItemLabelGenerator(new StandardCategoryItemLabelGenerator());
+        renderer.setBaseItemLabelsVisible(true);
+        chart.getCategoryPlot().setRenderer(renderer);
         final org.jfree.chart.axis.CategoryAxis domainAxis = plot.getDomainAxis();
         domainAxis.setCategoryLabelPositions(
             CategoryLabelPositions.createUpRotationLabelPositions(Math.PI / 6.0)

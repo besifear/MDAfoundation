@@ -210,7 +210,13 @@ public class TrainingProcessRepository extends EntMngClass implements TrainingPr
         
     }
     
-    
+    @Override
+    public List<TrainingProcess> findByYear(int i) {
+        Query query=em.createQuery ("SELECT tp FROM TrainingProcess tp WHERE tp.statusi='Active' AND FUNC('YEAR',tp.endDate)= :emr  ORDER BY tp.endDate ");
+        query.setParameter("emr",i);
+        return (List<TrainingProcess>)query.getResultList();
+        
+    }
     
     @Override
     public List<TrainingProcess> findBy2013() {

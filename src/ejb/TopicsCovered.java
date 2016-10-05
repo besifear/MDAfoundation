@@ -115,7 +115,7 @@ public class TopicsCovered implements Serializable {
 
     @Override
     public String toString() {
-        return "ejb.TopicsCovered[ topicID=" + topicID + " ]";
+        return topicCovered;
     }
     
 }

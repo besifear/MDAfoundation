@@ -444,7 +444,7 @@ public class Print extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_emritxtfActionPerformed
     
-    public void shtypPDF(String chunk){
+    public void shtypPDF(String chunk,String directory){
         
        
         
@@ -477,13 +477,70 @@ public class Print extends javax.swing.JInternalFrame {
             topicsAlb=topicscoveredir.findByTpLangId(tpidtxtf.getText().trim(),"Albanian");
             String tcs="";
             for(TopicsCovered tc :topicsAlb){
-                tcs+=tc+" ; \n";
+                tcs+=tc+"; ";
+                if(tcs.length()>35){
+                    
+                }
             }
             
             topicsEng=topicscoveredir.findByTpLangId(tpidtxtf.getText().trim(), "English");
             String tcseng="";
             for(TopicsCovered tc :topicsEng){
-                tcs+=tc+" ; \n";
+                tcseng+=tc+"; ";
+            }
+                
+            ArrayList<Chunk> chunkAlbanian=new ArrayList<Chunk>();
+            char[] temafullAlb=tcs.toCharArray();
+            ArrayList<Chunk> chunkEnglish=new ArrayList<Chunk>();
+            char[] temafullEng=tcseng.toCharArray();
+            
+           
+            String rreshtiTemes="";
+            String tempTcsAlb=tcs;
+            String tempTcsEng=tcseng;
+            
+            /*ALBANIAN*/
+            if(tempTcsAlb.length()<40){
+                chunkAlbanian.add(new Chunk(tempTcsAlb,FontFactory.getFont(FontFactory.HELVETICA,9)));
+            }
+            while(tempTcsAlb.length()>=40){
+                temafullAlb=tempTcsAlb.toCharArray();
+                for(int i=40;i<tempTcsAlb.length();i++){
+                    if(i>=40 && temafullAlb[i]==32){
+                        rreshtiTemes=tempTcsAlb.substring(0,i);
+                        tempTcsAlb=tempTcsAlb.substring(i);
+                        chunkAlbanian.add(new Chunk(rreshtiTemes,FontFactory.getFont(FontFactory.HELVETICA,9)));
+                        break;
+                    }else if(tempTcsAlb.length()==i)
+                    {
+                        rreshtiTemes=tempTcsAlb.substring(0,i);
+                        chunkAlbanian.add(new Chunk(rreshtiTemes,FontFactory.getFont(FontFactory.HELVETICA,9)));
+                        tempTcsAlb=tempTcsAlb.substring(i);
+                    }
+                }
+                
+            }
+            
+            /*ENGLISH*/
+            if(tempTcsEng.length()<40){
+                chunkEnglish.add(new Chunk(tempTcsEng,FontFactory.getFont(FontFactory.HELVETICA,9)));
+            }
+            while(tempTcsEng.length()>40){
+                temafullEng=tempTcsEng.toCharArray();
+                for(int i=40;i<tempTcsEng.length();i++){
+                    if(i>=40 && temafullEng[i]==32){
+                        rreshtiTemes=tempTcsEng.substring(0,i);
+                        tempTcsEng=tempTcsEng.substring(i);
+                        chunkEnglish.add(new Chunk(rreshtiTemes,FontFactory.getFont(FontFactory.HELVETICA,9)));
+                        break;
+                    }else if(tempTcsEng.length()==i)
+                    {
+                        rreshtiTemes=tempTcsEng.substring(0,i);
+                        chunkEnglish.add(new Chunk(rreshtiTemes,FontFactory.getFont(FontFactory.HELVETICA,9)));
+                        tempTcsEng=tempTcsEng.substring(i);
+                    }
+                }
+                
             }
             
             int maxTopic=topicsAlb.size();
@@ -517,12 +574,74 @@ public class Print extends javax.swing.JInternalFrame {
                 }
             
             }
+            
             training=trainingir.findByTpId(tpidtxtf.getText());
+            
             String ts=training.getTitleOfTrainingAlbanian();
+            
+            ArrayList<Chunk> chunkTOTAlbanian=new ArrayList<Chunk>();
+            char[] TOTfullAlb=ts.toCharArray();
+            
+            String rreshtiTitullit="";
+            String tempTOTAlb=ts;
+            
+            /*ALBANIAN*/
+            if(tempTOTAlb.length()<36){
+                chunkTOTAlbanian.add(new Chunk(tempTOTAlb,FontFactory.getFont(FontFactory.HELVETICA,11)));
+            }
+            while(tempTOTAlb.length()>=36){
+                TOTfullAlb=tempTOTAlb.toCharArray();
+                for(int i=36;i<tempTOTAlb.length();i++){
+                    if(i>=36 && TOTfullAlb[i]==32){
+                        rreshtiTitullit=tempTOTAlb.substring(0,i);
+                        tempTOTAlb=tempTOTAlb.substring(i);
+                        chunkTOTAlbanian.add(new Chunk(rreshtiTitullit,FontFactory.getFont(FontFactory.HELVETICA,11)));
+                        if(!tempTOTAlb.isEmpty() && tempTOTAlb.length()<36){
+                            rreshtiTitullit=tempTOTAlb;
+                            chunkTOTAlbanian.add(new Chunk(rreshtiTitullit,FontFactory.getFont(FontFactory.HELVETICA,11)));
+                        }
+                        break;
+                    }else if(tempTOTAlb.length()==i+1)
+                    {
+                        rreshtiTitullit=tempTOTAlb.substring(0,i+1);
+                        chunkTOTAlbanian.add(new Chunk(rreshtiTitullit,FontFactory.getFont(FontFactory.HELVETICA,11)));
+                        tempTOTAlb=tempTOTAlb.substring(i+1);
+                    }
+                }
+            }
+            
+            /*ENGLISH*/
             String tse=training.getTitleOfTrainingEnglish();
+            ArrayList<Chunk> chunkTOTEnglish=new ArrayList<Chunk>();
+            char[] TOTfullEng=tse.toCharArray();
+            String tempTOTEng=tse;
             
             
-            PdfWriter.getInstance(document, new FileOutputStream(s1+s2+" - "+idnum+"-"+tpid+"-ALB-ENG"+".pdf"));
+            if(tempTOTEng.length()<36){
+                chunkTOTEnglish.add(new Chunk(tempTOTEng,FontFactory.getFont(FontFactory.HELVETICA,11)));
+            }
+            while(tempTOTEng.length()>=36){
+                TOTfullEng=tempTOTEng.toCharArray();
+                for(int i=36;i<tempTOTEng.length();i++){
+                    if(i>=36 && TOTfullEng[i]==32){
+                        rreshtiTitullit=tempTOTEng.substring(0,i);
+                        tempTOTEng=tempTOTEng.substring(i);
+                        chunkTOTEnglish.add(new Chunk(rreshtiTitullit,FontFactory.getFont(FontFactory.HELVETICA,11)));
+                        if(!tempTOTEng.isEmpty() && tempTOTEng.length()<36){
+                            rreshtiTitullit=tempTOTEng;
+                            chunkTOTEnglish.add(new Chunk(rreshtiTitullit,FontFactory.getFont(FontFactory.HELVETICA,11)));
+                        }
+                        break;
+                    }else if(tempTOTEng.length()==i+1)
+                    {
+                        rreshtiTitullit=tempTOTEng.substring(0,i+1);
+                        chunkTOTEnglish.add(new Chunk(rreshtiTemes,FontFactory.getFont(FontFactory.HELVETICA,11)));
+                        tempTOTEng=tempTOTEng.substring(i+1);
+                    }
+                }
+            }
+            
+            PdfWriter.getInstance(document, new FileOutputStream(directory+s1+s2+" - "+idnum+"-"+tpid+"-ALB-ENG"+".pdf"));
             document.open();
            
             if(!pathi.equals("")){
@@ -619,7 +738,7 @@ public class Print extends javax.swing.JInternalFrame {
             
             para1.add(pha1);
             
-            Chunk c20=new Chunk(ts,FontFactory.getFont(FontFactory.HELVETICA,11));
+            /*Chunk c20=new Chunk(ts,FontFactory.getFont(FontFactory.HELVETICA,11));
                 Chunk c21=new Chunk(tse,FontFactory.getFont(FontFactory.HELVETICA,11));
                 Chunk c22=new Chunk("\n");
                 
@@ -639,7 +758,44 @@ public class Print extends javax.swing.JInternalFrame {
             pha2.add(c20);
             pha2.add(new Chunk(glue2));
             pha2.add(c21);
-            pha2.add(c22);
+            pha2.add(c22);*/
+            
+            Iterator<Chunk>iteratoriAlbanianTOT=chunkTOTAlbanian.iterator();
+            Iterator<Chunk>iteratoriEnglishTOT=chunkTOTEnglish.iterator();
+                pha2.add(c2);
+                for(int j=0;j<2;j++){
+                    if(iteratoriAlbanianTOT.hasNext()||iteratoriEnglishTOT.hasNext()){
+                        
+                        if(iteratoriAlbanianTOT.hasNext()&&iteratoriEnglishTOT.hasNext()) {  
+                            Chunk cha=iteratoriAlbanianTOT.next();
+                            Chunk che=iteratoriEnglishTOT.next();
+                            pha2.add(cha);
+                            pha2.add(new Chunk(glue2));
+                            pha2.add(che);
+                            pha2.add(c2);
+                        }
+                        else if(!iteratoriAlbanianTOT.hasNext()&&iteratoriEnglishTOT.hasNext()) {
+                            Chunk che=iteratoriEnglishTOT.next();
+                            pha2.add("");
+                            pha2.add(new Chunk(glue2));
+                            pha2.add(che);
+                            pha2.add(c2);
+                        }
+                        else if(iteratoriAlbanianTOT.hasNext()&&!iteratoriEnglishTOT.hasNext()) { 
+                            Chunk cha=iteratoriAlbanianTOT.next();
+                            pha2.add(cha);
+                            pha2.add(new Chunk(glue2));
+                            pha2.add("");
+                            pha2.add(c2);
+                        }
+                    } 
+                    else{
+                        pha2.add("");
+                        pha2.add(new Chunk(glue2));
+                        pha2.add("");
+                        pha2.add(c2);
+                    }
+                }
             
             para2.add(pha2);
             
@@ -664,28 +820,30 @@ public class Print extends javax.swing.JInternalFrame {
             Chunk c42=new Chunk("\n");
             
             pha4.add(c2);
-            Iterator<Chunk>iteratoria=chunka.iterator();
-                Iterator<Chunk>iteratorie=chunke.iterator();
+            
+            Iterator<Chunk>iteratoriAlbanian=chunkAlbanian.iterator();
+            Iterator<Chunk>iteratoriEnglish=chunkEnglish.iterator();
+            
                 for(int j=0;j<12;j++){
-                    if(iteratoria.hasNext()||iteratorie.hasNext()){
+                    if(iteratoriAlbanian.hasNext()||iteratoriEnglish.hasNext()){
                         
-                        if(iteratoria.hasNext()&&iteratorie.hasNext()) {  
-                            Chunk cha=iteratoria.next();
-                            Chunk che=iteratorie.next();
+                        if(iteratoriAlbanian.hasNext()&&iteratoriEnglish.hasNext()) {  
+                            Chunk cha=iteratoriAlbanian.next();
+                            Chunk che=iteratoriEnglish.next();
                             pha4.add(cha);
                             pha4.add(new Chunk(glue2));
                             pha4.add(che);
                             pha4.add(c42);
                         }
-                        else if(!iteratoria.hasNext()&&iteratorie.hasNext()) {
-                            Chunk che=iteratorie.next();
+                        else if(!iteratoriAlbanian.hasNext()&&iteratoriEnglish.hasNext()) {
+                            Chunk che=iteratoriEnglish.next();
                             pha4.add("");
                             pha4.add(new Chunk(glue2));
                             pha4.add(che);
                             pha4.add(c42);
                         }
-                        else if(iteratoria.hasNext()&&!iteratorie.hasNext()) { 
-                            Chunk cha=iteratoria.next();
+                        else if(iteratoriAlbanian.hasNext()&&!iteratoriEnglish.hasNext()) { 
+                            Chunk cha=iteratoriAlbanian.next();
                             pha4.add(cha);
                             pha4.add(new Chunk(glue2));
                             pha4.add("");
@@ -788,7 +946,7 @@ public class Print extends javax.swing.JInternalFrame {
         }
     }
     
-    public void shtypPDF2(String chunk){
+    public void shtypPDF2(String chunk,String directory){
         
        
         
@@ -824,13 +982,67 @@ public class Print extends javax.swing.JInternalFrame {
             topicsAlb=topicscoveredir.findByTpLangId(tpidtxtf.getText().trim(),"Albanian");
             String tcs="";
             for(TopicsCovered tc :topicsAlb){
-                tcs+=tc+" ; \n";
+                tcs+=tc+"; ";
             }
             
             topicsEng=topicscoveredir.findByTpLangId(tpidtxtf.getText().trim(), "English");
             String tcseng="";
             for(TopicsCovered tc :topicsEng){
-                tcs+=tc+" ; \n";
+                tcseng+=tc+"; ";
+            }
+                
+            ArrayList<Chunk> chunkAlbanian=new ArrayList<Chunk>();
+            char[] temafullAlb=tcs.toCharArray();
+            ArrayList<Chunk> chunkEnglish=new ArrayList<Chunk>();
+            char[] temafullEng=tcseng.toCharArray();
+            
+           
+            String rreshtiTemes="";
+            String tempTcsAlb=tcs;
+            String tempTcsEng=tcseng;
+            
+            /*ALBANIAN*/
+            if(tempTcsAlb.length()<40){
+                chunkAlbanian.add(new Chunk(tempTcsAlb,FontFactory.getFont(FontFactory.HELVETICA,9)));
+            }
+            while(tempTcsAlb.length()>=40){
+                temafullAlb=tempTcsAlb.toCharArray();
+                for(int i=40;i<tempTcsAlb.length();i++){
+                    if(i>=40 && temafullAlb[i]==32){
+                        rreshtiTemes=tempTcsAlb.substring(0,i);
+                        tempTcsAlb=tempTcsAlb.substring(i);
+                        chunkAlbanian.add(new Chunk(rreshtiTemes,FontFactory.getFont(FontFactory.HELVETICA,9)));
+                        break;
+                    }else if(tempTcsAlb.length()==i)
+                    {
+                        rreshtiTemes=tempTcsAlb.substring(0,i);
+                        chunkAlbanian.add(new Chunk(rreshtiTemes,FontFactory.getFont(FontFactory.HELVETICA,9)));
+                        tempTcsAlb=tempTcsAlb.substring(i);
+                    }
+                }
+                
+            }
+            
+            /*ENGLISH*/
+            if(tempTcsEng.length()<40){
+                chunkEnglish.add(new Chunk(tempTcsEng,FontFactory.getFont(FontFactory.HELVETICA,9)));
+            }
+            while(tempTcsEng.length()>40){
+                temafullEng=tempTcsEng.toCharArray();
+                for(int i=40;i<tempTcsEng.length();i++){
+                    if(i>=40 && temafullEng[i]==32){
+                        rreshtiTemes=tempTcsEng.substring(0,i);
+                        tempTcsEng=tempTcsEng.substring(i);
+                        chunkEnglish.add(new Chunk(rreshtiTemes,FontFactory.getFont(FontFactory.HELVETICA,9)));
+                        break;
+                    }else if(tempTcsEng.length()==i)
+                    {
+                        rreshtiTemes=tempTcsEng.substring(0,i);
+                        chunkEnglish.add(new Chunk(rreshtiTemes,FontFactory.getFont(FontFactory.HELVETICA,9)));
+                        tempTcsEng=tempTcsEng.substring(i);
+                    }
+                }
+                
             }
             
             int maxTopic=topicsAlb.size();
@@ -864,11 +1076,74 @@ public class Print extends javax.swing.JInternalFrame {
                 }
             
             }
-            training=trainingir.findByTpId(tpidtxtf.getText());
-            String tsa=training.getTitleOfTrainingAlbanian();
-            String tse=training.getTitleOfTrainingEnglish();
             
-            PdfWriter.getInstance(document, new FileOutputStream("PrintAll-"+tpidtxtf.getText()+"-ALB-ENG"+".pdf"));
+            training=trainingir.findByTpId(tpidtxtf.getText());
+            
+            String ts=training.getTitleOfTrainingAlbanian();
+            
+            ArrayList<Chunk> chunkTOTAlbanian=new ArrayList<Chunk>();
+            char[] TOTfullAlb=ts.toCharArray();
+            
+            String rreshtiTitullit="";
+            String tempTOTAlb=ts;
+            
+            /*ALBANIAN*/
+            if(tempTOTAlb.length()<36){
+                chunkTOTAlbanian.add(new Chunk(tempTOTAlb,FontFactory.getFont(FontFactory.HELVETICA,11)));
+            }
+            while(tempTOTAlb.length()>=36){
+                TOTfullAlb=tempTOTAlb.toCharArray();
+                for(int i=36;i<tempTOTAlb.length();i++){
+                    if(i>=36 && TOTfullAlb[i]==32){
+                        rreshtiTitullit=tempTOTAlb.substring(0,i);
+                        tempTOTAlb=tempTOTAlb.substring(i);
+                        chunkTOTAlbanian.add(new Chunk(rreshtiTitullit,FontFactory.getFont(FontFactory.HELVETICA,11)));
+                        if(!tempTOTAlb.isEmpty() && tempTOTAlb.length()<36){
+                            rreshtiTitullit=tempTOTAlb;
+                            chunkTOTAlbanian.add(new Chunk(rreshtiTitullit,FontFactory.getFont(FontFactory.HELVETICA,11)));
+                        }
+                        break;
+                    }else if(tempTOTAlb.length()==i+1)
+                    {
+                        rreshtiTitullit=tempTOTAlb.substring(0,i+1);
+                        chunkTOTAlbanian.add(new Chunk(rreshtiTitullit,FontFactory.getFont(FontFactory.HELVETICA,11)));
+                        tempTOTAlb=tempTOTAlb.substring(i+1);
+                    }
+                }
+            }
+            
+            /*ENGLISH*/
+            String tse=training.getTitleOfTrainingEnglish();
+            ArrayList<Chunk> chunkTOTEnglish=new ArrayList<Chunk>();
+            char[] TOTfullEng=tse.toCharArray();
+            String tempTOTEng=tse;
+            
+            
+            if(tempTOTEng.length()<36){
+                chunkTOTEnglish.add(new Chunk(tempTOTEng,FontFactory.getFont(FontFactory.HELVETICA,11)));
+            }
+            while(tempTOTEng.length()>=36){
+                TOTfullEng=tempTOTEng.toCharArray();
+                for(int i=36;i<tempTOTEng.length();i++){
+                    if(i>=36 && TOTfullEng[i]==32){
+                        rreshtiTitullit=tempTOTEng.substring(0,i);
+                        tempTOTEng=tempTOTEng.substring(i);
+                        chunkTOTEnglish.add(new Chunk(rreshtiTitullit,FontFactory.getFont(FontFactory.HELVETICA,11)));
+                        if(!tempTOTEng.isEmpty() && tempTOTEng.length()<36){
+                            rreshtiTitullit=tempTOTEng;
+                            chunkTOTEnglish.add(new Chunk(rreshtiTitullit,FontFactory.getFont(FontFactory.HELVETICA,11)));
+                        }
+                        break;
+                    }else if(tempTOTEng.length()==i+1)
+                    {
+                        rreshtiTitullit=tempTOTEng.substring(0,i+1);
+                        chunkTOTEnglish.add(new Chunk(rreshtiTemes,FontFactory.getFont(FontFactory.HELVETICA,11)));
+                        tempTOTEng=tempTOTEng.substring(i+1);
+                    }
+                }
+            }
+            
+            PdfWriter.getInstance(document, new FileOutputStream(directory+"PrintAll-"+tpidtxtf.getText()+"-ALB-ENG"+".pdf"));
                 document.open();
             
             for(int i=0;i<participants.size();i++){
@@ -972,27 +1247,42 @@ public class Print extends javax.swing.JInternalFrame {
 
                 para1.add(pha1);
                 
-                Chunk c20=new Chunk(tsa,FontFactory.getFont(FontFactory.HELVETICA,11));
-                Chunk c21=new Chunk(tse,FontFactory.getFont(FontFactory.HELVETICA,11));
-                Chunk c22=new Chunk("\n");
-                
-                if(tsa.toString().equals("")){
-                    c20=new Chunk(tse,FontFactory.getFont(FontFactory.HELVETICA,11));
-                }   
-                else if(tse.toString().equals("")){
-                    c21=new Chunk(tsa,FontFactory.getFont(FontFactory.HELVETICA,11));
-                }
-                else{
-                    c20=new Chunk(tsa,FontFactory.getFont(FontFactory.HELVETICA,11));
-                    c21=new Chunk(tse,FontFactory.getFont(FontFactory.HELVETICA,11));
-                }
+                Iterator<Chunk>iteratoriAlbanianTOT=chunkTOTAlbanian.iterator();
+                Iterator<Chunk>iteratoriEnglishTOT=chunkTOTEnglish.iterator();
+                    pha2.add(c2);
+                    for(int j=0;j<2;j++){
+                        if(iteratoriAlbanianTOT.hasNext()||iteratoriEnglishTOT.hasNext()){
 
-                pha2.add(c2);
-                pha2.add(c2);
-                pha2.add(c20);
-                pha2.add(new Chunk(glue2));
-                pha2.add(c21);
-                pha2.add(c22);
+                            if(iteratoriAlbanianTOT.hasNext()&&iteratoriEnglishTOT.hasNext()) {  
+                                Chunk cha=iteratoriAlbanianTOT.next();
+                                Chunk che=iteratoriEnglishTOT.next();
+                                pha2.add(cha);
+                                pha2.add(new Chunk(glue2));
+                                pha2.add(che);
+                                pha2.add(c2);
+                            }
+                            else if(!iteratoriAlbanianTOT.hasNext()&&iteratoriEnglishTOT.hasNext()) {
+                                Chunk che=iteratoriEnglishTOT.next();
+                                pha2.add("");
+                                pha2.add(new Chunk(glue2));
+                                pha2.add(che);
+                                pha2.add(c2);
+                            }
+                            else if(iteratoriAlbanianTOT.hasNext()&&!iteratoriEnglishTOT.hasNext()) { 
+                                Chunk cha=iteratoriAlbanianTOT.next();
+                                pha2.add(cha);
+                                pha2.add(new Chunk(glue2));
+                                pha2.add("");
+                                pha2.add(c2);
+                            }
+                        } 
+                        else{
+                            pha2.add("");
+                            pha2.add(new Chunk(glue2));
+                            pha2.add("");
+                            pha2.add(c2);
+                        }
+                    }
 
                 para2.add(pha2);
 
@@ -1019,28 +1309,29 @@ public class Print extends javax.swing.JInternalFrame {
 
                 
                 pha4.add(c2);
-                Iterator<Chunk>iteratoria=chunka.iterator();
-                Iterator<Chunk>iteratorie=chunke.iterator();
+                Iterator<Chunk>iteratoriAlbanian=chunkAlbanian.iterator();
+                Iterator<Chunk>iteratoriEnglish=chunkEnglish.iterator();
+            
                 for(int j=0;j<12;j++){
-                    if(iteratoria.hasNext()||iteratorie.hasNext()){
+                    if(iteratoriAlbanian.hasNext()||iteratoriEnglish.hasNext()){
                         
-                        if(iteratoria.hasNext()&&iteratorie.hasNext()) {  
-                            Chunk cha=iteratoria.next();
-                            Chunk che=iteratorie.next();
+                        if(iteratoriAlbanian.hasNext()&&iteratoriEnglish.hasNext()) {  
+                            Chunk cha=iteratoriAlbanian.next();
+                            Chunk che=iteratoriEnglish.next();
                             pha4.add(cha);
                             pha4.add(new Chunk(glue2));
                             pha4.add(che);
                             pha4.add(c42);
                         }
-                        else if(!iteratoria.hasNext()&&iteratorie.hasNext()) {
-                            Chunk che=iteratorie.next();
+                        else if(!iteratoriAlbanian.hasNext()&&iteratoriEnglish.hasNext()) {
+                            Chunk che=iteratoriEnglish.next();
                             pha4.add("");
                             pha4.add(new Chunk(glue2));
                             pha4.add(che);
                             pha4.add(c42);
                         }
-                        else if(iteratoria.hasNext()&&!iteratorie.hasNext()) { 
-                            Chunk cha=iteratoria.next();
+                        else if(iteratoriAlbanian.hasNext()&&!iteratoriEnglish.hasNext()) { 
+                            Chunk cha=iteratoriAlbanian.next();
                             pha4.add(cha);
                             pha4.add(new Chunk(glue2));
                             pha4.add("");
@@ -1147,7 +1438,7 @@ public class Print extends javax.swing.JInternalFrame {
         }
     }
     
-    public void shtypPDFSRB(String chunk){
+    public void shtypPDFSRB(String chunk,String directory){
         
        
         
@@ -1178,13 +1469,67 @@ public class Print extends javax.swing.JInternalFrame {
             topicsAlb=topicscoveredir.findByTpLangId(tpidtxtf.getText().trim(),"Serbian");
             String tcs="";
             for(TopicsCovered tc :topicsAlb){
-                tcs+=tc+" ; \n";
+                tcs+=tc+"; ";
             }
             
             topicsEng=topicscoveredir.findByTpLangId(tpidtxtf.getText().trim(), "English");
             String tcseng="";
             for(TopicsCovered tc :topicsEng){
-                tcs+=tc+" ; \n";
+                tcseng+=tc+"; ";
+            }
+            
+            ArrayList<Chunk> chunkAlbanian=new ArrayList<Chunk>();
+            char[] temafullAlb=tcs.toCharArray();
+            ArrayList<Chunk> chunkEnglish=new ArrayList<Chunk>();
+            char[] temafullEng=tcseng.toCharArray();
+            
+           
+            String rreshtiTemes="";
+            String tempTcsAlb=tcs;
+            String tempTcsEng=tcseng;
+            
+            /*ALBANIAN*/
+            if(tempTcsAlb.length()<40){
+                chunkAlbanian.add(new Chunk(tempTcsAlb,FontFactory.getFont(FontFactory.HELVETICA,9)));
+            }
+            while(tempTcsAlb.length()>=40){
+                temafullAlb=tempTcsAlb.toCharArray();
+                for(int i=40;i<tempTcsAlb.length();i++){
+                    if(i>=40 && temafullAlb[i]==32){
+                        rreshtiTemes=tempTcsAlb.substring(0,i);
+                        tempTcsAlb=tempTcsAlb.substring(i);
+                        chunkAlbanian.add(new Chunk(rreshtiTemes,FontFactory.getFont(FontFactory.HELVETICA,9)));
+                        break;
+                    }else if(tempTcsAlb.length()==i)
+                    {
+                        rreshtiTemes=tempTcsAlb.substring(0,i);
+                        chunkAlbanian.add(new Chunk(rreshtiTemes,FontFactory.getFont(FontFactory.HELVETICA,9)));
+                        tempTcsAlb=tempTcsAlb.substring(i);
+                    }
+                }
+                
+            }
+            
+            /*ENGLISH*/
+            if(tempTcsEng.length()<40){
+                chunkEnglish.add(new Chunk(tempTcsEng,FontFactory.getFont(FontFactory.HELVETICA,9)));
+            }
+            while(tempTcsEng.length()>40){
+                temafullEng=tempTcsEng.toCharArray();
+                for(int i=40;i<tempTcsEng.length();i++){
+                    if(i>=40 && temafullEng[i]==32){
+                        rreshtiTemes=tempTcsEng.substring(0,i);
+                        tempTcsEng=tempTcsEng.substring(i);
+                        chunkEnglish.add(new Chunk(rreshtiTemes,FontFactory.getFont(FontFactory.HELVETICA,9)));
+                        break;
+                    }else if(tempTcsEng.length()==i)
+                    {
+                        rreshtiTemes=tempTcsEng.substring(0,i);
+                        chunkEnglish.add(new Chunk(rreshtiTemes,FontFactory.getFont(FontFactory.HELVETICA,9)));
+                        tempTcsEng=tempTcsEng.substring(i);
+                    }
+                }
+                
             }
             
             int maxTopic=topicsAlb.size();
@@ -1218,12 +1563,75 @@ public class Print extends javax.swing.JInternalFrame {
                 }
             
             }
+            
             training=trainingir.findByTpId(tpidtxtf.getText());
+            
             String ts=training.getTitleOfTrainingSerbian();
+            
+            ArrayList<Chunk> chunkTOTAlbanian=new ArrayList<Chunk>();
+            char[] TOTfullAlb=ts.toCharArray();
+            
+            String rreshtiTitullit="";
+            String tempTOTAlb=ts;
+            
+            /*ALBANIAN*/
+            if(tempTOTAlb.length()<36){
+                chunkTOTAlbanian.add(new Chunk(tempTOTAlb,FontFactory.getFont(FontFactory.HELVETICA,11)));
+            }
+            while(tempTOTAlb.length()>=36){
+                TOTfullAlb=tempTOTAlb.toCharArray();
+                for(int i=36;i<tempTOTAlb.length();i++){
+                    if(i>=36 && TOTfullAlb[i]==32){
+                        rreshtiTitullit=tempTOTAlb.substring(0,i);
+                        tempTOTAlb=tempTOTAlb.substring(i);
+                        chunkTOTAlbanian.add(new Chunk(rreshtiTitullit,FontFactory.getFont(FontFactory.HELVETICA,11)));
+                        if(!tempTOTAlb.isEmpty() && tempTOTAlb.length()<36){
+                            rreshtiTitullit=tempTOTAlb;
+                            chunkTOTAlbanian.add(new Chunk(rreshtiTitullit,FontFactory.getFont(FontFactory.HELVETICA,11)));
+                        }
+                        break;
+                    }else if(tempTOTAlb.length()==i+1)
+                    {
+                        rreshtiTitullit=tempTOTAlb.substring(0,i+1);
+                        chunkTOTAlbanian.add(new Chunk(rreshtiTitullit,FontFactory.getFont(FontFactory.HELVETICA,11)));
+                        tempTOTAlb=tempTOTAlb.substring(i+1);
+                    }
+                }
+            }
+            
+            /*ENGLISH*/
             String tse=training.getTitleOfTrainingEnglish();
+            ArrayList<Chunk> chunkTOTEnglish=new ArrayList<Chunk>();
+            char[] TOTfullEng=tse.toCharArray();
+            String tempTOTEng=tse;
             
             
-            PdfWriter.getInstance(document, new FileOutputStream(s1+s2+" - "+idnum+"-"+tpid+"-SRB-ENG"+".pdf"));
+            if(tempTOTEng.length()<36){
+                chunkTOTEnglish.add(new Chunk(tempTOTEng,FontFactory.getFont(FontFactory.HELVETICA,11)));
+            }
+            while(tempTOTEng.length()>=36){
+                TOTfullEng=tempTOTEng.toCharArray();
+                for(int i=36;i<tempTOTEng.length();i++){
+                    if(i>=36 && TOTfullEng[i]==32){
+                        rreshtiTitullit=tempTOTEng.substring(0,i);
+                        tempTOTEng=tempTOTEng.substring(i);
+                        chunkTOTEnglish.add(new Chunk(rreshtiTitullit,FontFactory.getFont(FontFactory.HELVETICA,11)));
+                        if(!tempTOTEng.isEmpty() && tempTOTEng.length()<36){
+                            rreshtiTitullit=tempTOTEng;
+                            chunkTOTEnglish.add(new Chunk(rreshtiTitullit,FontFactory.getFont(FontFactory.HELVETICA,11)));
+                        }
+                        break;
+                    }else if(tempTOTEng.length()==i+1)
+                    {
+                        rreshtiTitullit=tempTOTEng.substring(0,i+1);
+                        chunkTOTEnglish.add(new Chunk(rreshtiTemes,FontFactory.getFont(FontFactory.HELVETICA,11)));
+                        tempTOTEng=tempTOTEng.substring(i+1);
+                    }
+                }
+            }
+            
+            
+            PdfWriter.getInstance(document, new FileOutputStream(directory+s1+s2+" - "+idnum+"-"+tpid+"-SRB-ENG"+".pdf"));
             document.open();
            
             if(!pathi.equals("")){
@@ -1274,19 +1682,19 @@ public class Print extends javax.swing.JInternalFrame {
             Chunk glue2 = new Chunk(new VerticalPositionMark());
             
             
-            Chunk c1=new Chunk("Shpërblehet me ceritifkatë ",FontFactory.getFont(FontFactory.HELVETICA,11,Font.BOLD));
+            Chunk c1=new Chunk("Nagradjuje se sa ",FontFactory.getFont(FontFactory.HELVETICA,11,Font.BOLD));
             Chunk c8=new Chunk("Has been awarded with ",FontFactory.getFont(FontFactory.HELVETICA,11,Font.BOLD));
             Chunk c2=new Chunk("\n");
             
-            Chunk c3=new Chunk("të  pjesmarrjes pas ",FontFactory.getFont(FontFactory.HELVETICA,11,Font.BOLD));
+            Chunk c3=new Chunk("Potvrdom-Certifikatom ",FontFactory.getFont(FontFactory.HELVETICA,11,Font.BOLD));
             Chunk c10=new Chunk("Certicate of participation ",FontFactory.getFont(FontFactory.HELVETICA,11,Font.BOLD));
             Chunk c4=new Chunk("\n");
             
-            Chunk c5=new Chunk("përfundimit me sukses ",FontFactory.getFont(FontFactory.HELVETICA,11,Font.BOLD));
+            Chunk c5=new Chunk("nakon  učešća i uspešnog ",FontFactory.getFont(FontFactory.HELVETICA,11,Font.BOLD));
             Chunk c12=new Chunk("upon having successfully",FontFactory.getFont(FontFactory.HELVETICA,11,Font.BOLD));
             Chunk c6=new Chunk("\n");
             
-            Chunk c7=new Chunk("të trajnimit : ",FontFactory.getFont(FontFactory.HELVETICA,11,Font.BOLD));
+            Chunk c7=new Chunk("završetka obuke: ",FontFactory.getFont(FontFactory.HELVETICA,11,Font.BOLD));
             Chunk c14=new Chunk("completed training of : ",FontFactory.getFont(FontFactory.HELVETICA,11,Font.BOLD));
             Chunk c9=new Chunk("\n");
             
@@ -1316,27 +1724,52 @@ public class Print extends javax.swing.JInternalFrame {
             
             para1.add(pha1);
             
-            Chunk c20=new Chunk(ts,FontFactory.getFont(FontFactory.HELVETICA,11));
-            Chunk c21=new Chunk(tse,FontFactory.getFont(FontFactory.HELVETICA,11));
-            Chunk c22=new Chunk("\n");
+            Iterator<Chunk>iteratoriAlbanianTOT=chunkTOTAlbanian.iterator();
+                Iterator<Chunk>iteratoriEnglishTOT=chunkTOTEnglish.iterator();
+                    pha2.add(c2);
+                    for(int j=0;j<2;j++){
+                        if(iteratoriAlbanianTOT.hasNext()||iteratoriEnglishTOT.hasNext()){
+
+                            if(iteratoriAlbanianTOT.hasNext()&&iteratoriEnglishTOT.hasNext()) {  
+                                Chunk cha=iteratoriAlbanianTOT.next();
+                                Chunk che=iteratoriEnglishTOT.next();
+                                pha2.add(cha);
+                                pha2.add(new Chunk(glue2));
+                                pha2.add(che);
+                                pha2.add(c2);
+                            }
+                            else if(!iteratoriAlbanianTOT.hasNext()&&iteratoriEnglishTOT.hasNext()) {
+                                Chunk che=iteratoriEnglishTOT.next();
+                                pha2.add("");
+                                pha2.add(new Chunk(glue2));
+                                pha2.add(che);
+                                pha2.add(c2);
+                            }
+                            else if(iteratoriAlbanianTOT.hasNext()&&!iteratoriEnglishTOT.hasNext()) { 
+                                Chunk cha=iteratoriAlbanianTOT.next();
+                                pha2.add(cha);
+                                pha2.add(new Chunk(glue2));
+                                pha2.add("");
+                                pha2.add(c2);
+                            }
+                        } 
+                        else{
+                            pha2.add("");
+                            pha2.add(new Chunk(glue2));
+                            pha2.add("");
+                            pha2.add(c2);
+                        }
+                    }
+
             
-            pha2.add(c2);
-            pha2.add(c2);
-            pha2.add(c20);
-            pha2.add(new Chunk(glue2));
-            pha2.add(c21);
-            pha2.add(c22);
             
             para2.add(pha2);
             
             
-            Chunk c30=new Chunk("Me këto module",FontFactory.getFont(FontFactory.HELVETICA,12,Font.BOLD));
+            Chunk c30=new Chunk("Sa ovim modulima",FontFactory.getFont(FontFactory.HELVETICA,12,Font.BOLD));
             Chunk c31=new Chunk("With the following modules",FontFactory.getFont(FontFactory.HELVETICA,12,Font.BOLD));
             Chunk c32=new Chunk("\n");
             
-            Chunk c33=new Chunk("të  pjesmarrjes pas ",FontFactory.getFont(FontFactory.HELVETICA,12,Font.BOLD));
-            Chunk c34=new Chunk("Certicate of participation ",FontFactory.getFont(FontFactory.HELVETICA,12,Font.BOLD));
-            Chunk c35=new Chunk("\n");
             
             pha3.add(c2);
             pha3.add(c2);
@@ -1351,28 +1784,29 @@ public class Print extends javax.swing.JInternalFrame {
             
             
             pha4.add(c2);
-            Iterator<Chunk>iteratoria=chunka.iterator();
-            Iterator<Chunk>iteratorie=chunke.iterator();
-            for(int j=0;j<12;j++){
-                    if(iteratoria.hasNext()||iteratorie.hasNext()){
+                Iterator<Chunk>iteratoriAlbanian=chunkAlbanian.iterator();
+                Iterator<Chunk>iteratoriEnglish=chunkEnglish.iterator();
+            
+                for(int j=0;j<12;j++){
+                    if(iteratoriAlbanian.hasNext()||iteratoriEnglish.hasNext()){
                         
-                        if(iteratoria.hasNext()&&iteratorie.hasNext()) {  
-                            Chunk cha=iteratoria.next();
-                            Chunk che=iteratorie.next();
+                        if(iteratoriAlbanian.hasNext()&&iteratoriEnglish.hasNext()) {  
+                            Chunk cha=iteratoriAlbanian.next();
+                            Chunk che=iteratoriEnglish.next();
                             pha4.add(cha);
                             pha4.add(new Chunk(glue2));
                             pha4.add(che);
                             pha4.add(c42);
                         }
-                        else if(!iteratoria.hasNext()&&iteratorie.hasNext()) {
-                            Chunk che=iteratorie.next();
+                        else if(!iteratoriAlbanian.hasNext()&&iteratoriEnglish.hasNext()) {
+                            Chunk che=iteratoriEnglish.next();
                             pha4.add("");
                             pha4.add(new Chunk(glue2));
                             pha4.add(che);
                             pha4.add(c42);
                         }
-                        else if(iteratoria.hasNext()&&!iteratorie.hasNext()) { 
-                            Chunk cha=iteratoria.next();
+                        else if(iteratoriAlbanian.hasNext()&&!iteratoriEnglish.hasNext()) { 
+                            Chunk cha=iteratoriAlbanian.next();
                             pha4.add(cha);
                             pha4.add(new Chunk(glue2));
                             pha4.add("");
@@ -1401,11 +1835,11 @@ public class Print extends javax.swing.JInternalFrame {
             para4.add(pha4);
             
             
-            Chunk c50=new Chunk("Drejtori Ekzekutiv :",FontFactory.getFont(FontFactory.HELVETICA,10));
+            Chunk c50=new Chunk("Izvršni Direktor :",FontFactory.getFont(FontFactory.HELVETICA,10));
             Chunk c51=new Chunk("Chief Executive Officer :",FontFactory.getFont(FontFactory.HELVETICA,10));
             Chunk c52=new Chunk("\n");
             
-            Chunk c53=new Chunk("Administratori i trajnimeve :",FontFactory.getFont(FontFactory.HELVETICA,10));
+            Chunk c53=new Chunk("Administrator obuke :",FontFactory.getFont(FontFactory.HELVETICA,10));
             Chunk c54=new Chunk("Training registar :",FontFactory.getFont(FontFactory.HELVETICA,10));
             Chunk c55=new Chunk("\n");
             
@@ -1439,7 +1873,7 @@ public class Print extends javax.swing.JInternalFrame {
             para6.add(pha6);
             
             
-            Chunk c70=new Chunk("Data | Date : " + today,FontFactory.getFont(FontFactory.HELVETICA,10));
+            Chunk c70=new Chunk("Datum | Date : " + today,FontFactory.getFont(FontFactory.HELVETICA,10));
             Chunk c71=new Chunk(tpid+"   "+ idnum,FontFactory.getFont(FontFactory.HELVETICA,10));
             Chunk c72=new Chunk("\n");
             Chunk c73=new Chunk(chunk,FontFactory.getFont(FontFactory.HELVETICA,9));
@@ -1476,7 +1910,7 @@ public class Print extends javax.swing.JInternalFrame {
         }
     }
     
-    public void shtypPDF2SRB(String chunk){
+    public void shtypPDF2SRB(String chunk,String directory){
         
        
         
@@ -1512,13 +1946,67 @@ public class Print extends javax.swing.JInternalFrame {
             topicsAlb=topicscoveredir.findByTpLangId(tpidtxtf.getText().trim(),"Serbian");
             String tcs="";
             for(TopicsCovered tc :topicsAlb){
-                tcs+=tc+" ; \n";
+                tcs+=tc+"; ";
             }
             
             topicsEng=topicscoveredir.findByTpLangId(tpidtxtf.getText().trim(), "English");
             String tcseng="";
             for(TopicsCovered tc :topicsEng){
-                tcs+=tc+" ; \n";
+                tcseng+=tc+"; ";
+            }
+            
+            ArrayList<Chunk> chunkAlbanian=new ArrayList<Chunk>();
+            char[] temafullAlb=tcs.toCharArray();
+            ArrayList<Chunk> chunkEnglish=new ArrayList<Chunk>();
+            char[] temafullEng=tcseng.toCharArray();
+            
+           
+            String rreshtiTemes="";
+            String tempTcsAlb=tcs;
+            String tempTcsEng=tcseng;
+            
+            /*ALBANIAN*/
+            if(tempTcsAlb.length()<40){
+                chunkAlbanian.add(new Chunk(tempTcsAlb,FontFactory.getFont(FontFactory.HELVETICA,9)));
+            }
+            while(tempTcsAlb.length()>=40){
+                temafullAlb=tempTcsAlb.toCharArray();
+                for(int i=40;i<tempTcsAlb.length();i++){
+                    if(i>=40 && temafullAlb[i]==32){
+                        rreshtiTemes=tempTcsAlb.substring(0,i);
+                        tempTcsAlb=tempTcsAlb.substring(i);
+                        chunkAlbanian.add(new Chunk(rreshtiTemes,FontFactory.getFont(FontFactory.HELVETICA,9)));
+                        break;
+                    }else if(tempTcsAlb.length()==i)
+                    {
+                        rreshtiTemes=tempTcsAlb.substring(0,i);
+                        chunkAlbanian.add(new Chunk(rreshtiTemes,FontFactory.getFont(FontFactory.HELVETICA,9)));
+                        tempTcsAlb=tempTcsAlb.substring(i);
+                    }
+                }
+                
+            }
+            
+            /*ENGLISH*/
+            if(tempTcsEng.length()<40){
+                chunkEnglish.add(new Chunk(tempTcsEng,FontFactory.getFont(FontFactory.HELVETICA,9)));
+            }
+            while(tempTcsEng.length()>40){
+                temafullEng=tempTcsEng.toCharArray();
+                for(int i=40;i<tempTcsEng.length();i++){
+                    if(i>=40 && temafullEng[i]==32){
+                        rreshtiTemes=tempTcsEng.substring(0,i);
+                        tempTcsEng=tempTcsEng.substring(i);
+                        chunkEnglish.add(new Chunk(rreshtiTemes,FontFactory.getFont(FontFactory.HELVETICA,9)));
+                        break;
+                    }else if(tempTcsEng.length()==i)
+                    {
+                        rreshtiTemes=tempTcsEng.substring(0,i);
+                        chunkEnglish.add(new Chunk(rreshtiTemes,FontFactory.getFont(FontFactory.HELVETICA,9)));
+                        tempTcsEng=tempTcsEng.substring(i);
+                    }
+                }
+                
             }
             
             int maxTopic=topicsAlb.size();
@@ -1552,11 +2040,74 @@ public class Print extends javax.swing.JInternalFrame {
                 }
             
             }
-            training=trainingir.findByTpId(tpidtxtf.getText());
-            String tsa=training.getTitleOfTrainingSerbian();
-            String tse=training.getTitleOfTrainingEnglish();
             
-            PdfWriter.getInstance(document, new FileOutputStream("PrintAll-"+tpidtxtf.getText()+"-SRB-ENG"+".pdf"));
+            training=trainingir.findByTpId(tpidtxtf.getText());
+            
+            String ts=training.getTitleOfTrainingSerbian();
+            
+            ArrayList<Chunk> chunkTOTAlbanian=new ArrayList<Chunk>();
+            char[] TOTfullAlb=ts.toCharArray();
+            
+            String rreshtiTitullit="";
+            String tempTOTAlb=ts;
+            
+            /*ALBANIAN*/
+            if(tempTOTAlb.length()<36){
+                chunkTOTAlbanian.add(new Chunk(tempTOTAlb,FontFactory.getFont(FontFactory.HELVETICA,11)));
+            }
+            while(tempTOTAlb.length()>=36){
+                TOTfullAlb=tempTOTAlb.toCharArray();
+                for(int i=36;i<tempTOTAlb.length();i++){
+                    if(i>=36 && TOTfullAlb[i]==32){
+                        rreshtiTitullit=tempTOTAlb.substring(0,i);
+                        tempTOTAlb=tempTOTAlb.substring(i);
+                        chunkTOTAlbanian.add(new Chunk(rreshtiTitullit,FontFactory.getFont(FontFactory.HELVETICA,11)));
+                        if(!tempTOTAlb.isEmpty() && tempTOTAlb.length()<36){
+                            rreshtiTitullit=tempTOTAlb;
+                            chunkTOTAlbanian.add(new Chunk(rreshtiTitullit,FontFactory.getFont(FontFactory.HELVETICA,11)));
+                        }
+                        break;
+                    }else if(tempTOTAlb.length()==i+1)
+                    {
+                        rreshtiTitullit=tempTOTAlb.substring(0,i+1);
+                        chunkTOTAlbanian.add(new Chunk(rreshtiTitullit,FontFactory.getFont(FontFactory.HELVETICA,11)));
+                        tempTOTAlb=tempTOTAlb.substring(i+1);
+                    }
+                }
+            }
+            
+            /*ENGLISH*/
+            String tse=training.getTitleOfTrainingEnglish();
+            ArrayList<Chunk> chunkTOTEnglish=new ArrayList<Chunk>();
+            char[] TOTfullEng=tse.toCharArray();
+            String tempTOTEng=tse;
+            
+            
+            if(tempTOTEng.length()<36){
+                chunkTOTEnglish.add(new Chunk(tempTOTEng,FontFactory.getFont(FontFactory.HELVETICA,11)));
+            }
+            while(tempTOTEng.length()>=36){
+                TOTfullEng=tempTOTEng.toCharArray();
+                for(int i=36;i<tempTOTEng.length();i++){
+                    if(i>=36 && TOTfullEng[i]==32){
+                        rreshtiTitullit=tempTOTEng.substring(0,i);
+                        tempTOTEng=tempTOTEng.substring(i);
+                        chunkTOTEnglish.add(new Chunk(rreshtiTitullit,FontFactory.getFont(FontFactory.HELVETICA,11)));
+                        if(!tempTOTEng.isEmpty() && tempTOTEng.length()<36){
+                            rreshtiTitullit=tempTOTEng;
+                            chunkTOTEnglish.add(new Chunk(rreshtiTitullit,FontFactory.getFont(FontFactory.HELVETICA,11)));
+                        }
+                        break;
+                    }else if(tempTOTEng.length()==i+1)
+                    {
+                        rreshtiTitullit=tempTOTEng.substring(0,i+1);
+                        chunkTOTEnglish.add(new Chunk(rreshtiTemes,FontFactory.getFont(FontFactory.HELVETICA,11)));
+                        tempTOTEng=tempTOTEng.substring(i+1);
+                    }
+                }
+            }
+            
+            PdfWriter.getInstance(document, new FileOutputStream(directory+"PrintAll-"+tpidtxtf.getText()+"-SRB-ENG"+".pdf"));
                 document.open();
             
             for(int i=0;i<participants.size();i++){
@@ -1617,19 +2168,19 @@ public class Print extends javax.swing.JInternalFrame {
                 Chunk glue2 = new Chunk(new VerticalPositionMark());
 
 
-                Chunk c1=new Chunk("Shpërblehet me ceritifkatë ",FontFactory.getFont(FontFactory.HELVETICA,11,Font.BOLD));
+                Chunk c1=new Chunk("Nagradjuje se sa  ",FontFactory.getFont(FontFactory.HELVETICA,11,Font.BOLD));
                 Chunk c8=new Chunk("Has been awarded with ",FontFactory.getFont(FontFactory.HELVETICA,11,Font.BOLD));
                 Chunk c2=new Chunk("\n");
 
-                Chunk c3=new Chunk("të  pjesmarrjes pas ",FontFactory.getFont(FontFactory.HELVETICA,11,Font.BOLD));
+                Chunk c3=new Chunk("Potvrdom-Certifikatom ",FontFactory.getFont(FontFactory.HELVETICA,11,Font.BOLD));
                 Chunk c10=new Chunk("Certicate of participation ",FontFactory.getFont(FontFactory.HELVETICA,11,Font.BOLD));
                 Chunk c4=new Chunk("\n");
 
-                Chunk c5=new Chunk("përfundimit me sukses ",FontFactory.getFont(FontFactory.HELVETICA,11,Font.BOLD));
+                Chunk c5=new Chunk("nakon  učešća i uspešnog ",FontFactory.getFont(FontFactory.HELVETICA,11,Font.BOLD));
                 Chunk c12=new Chunk("upon having successfully",FontFactory.getFont(FontFactory.HELVETICA,11,Font.BOLD));
                 Chunk c6=new Chunk("\n");
 
-                Chunk c7=new Chunk("të trajnimit : ",FontFactory.getFont(FontFactory.HELVETICA,11,Font.BOLD));
+                Chunk c7=new Chunk("završetka obuke:",FontFactory.getFont(FontFactory.HELVETICA,11,Font.BOLD));
                 Chunk c14=new Chunk("completed training of : ",FontFactory.getFont(FontFactory.HELVETICA,11,Font.BOLD));
                 Chunk c9=new Chunk("\n");
 
@@ -1659,38 +2210,50 @@ public class Print extends javax.swing.JInternalFrame {
 
                 para1.add(pha1);
                 
-                Chunk c20=new Chunk(tsa,FontFactory.getFont(FontFactory.HELVETICA,11));
-                Chunk c21=new Chunk(tse,FontFactory.getFont(FontFactory.HELVETICA,11));
-                Chunk c22=new Chunk("\n");
-                
-                if(tsa.toString().equals("")){
-                    c20=new Chunk(tse,FontFactory.getFont(FontFactory.HELVETICA,11));
-                }   
-                else if(tse.toString().equals("")){
-                    c21=new Chunk(tsa,FontFactory.getFont(FontFactory.HELVETICA,11));
-                }
-                else{
-                    c20=new Chunk(tsa,FontFactory.getFont(FontFactory.HELVETICA,11));
-                    c21=new Chunk(tse,FontFactory.getFont(FontFactory.HELVETICA,11));
-                }
+                Iterator<Chunk>iteratoriAlbanianTOT=chunkTOTAlbanian.iterator();
+                Iterator<Chunk>iteratoriEnglishTOT=chunkTOTEnglish.iterator();
+                    pha2.add(c2);
+                    for(int j=0;j<2;j++){
+                        if(iteratoriAlbanianTOT.hasNext()||iteratoriEnglishTOT.hasNext()){
 
-                pha2.add(c2);
-                pha2.add(c2);
-                pha2.add(c20);
-                pha2.add(new Chunk(glue2));
-                pha2.add(c21);
-                pha2.add(c22);
+                            if(iteratoriAlbanianTOT.hasNext()&&iteratoriEnglishTOT.hasNext()) {  
+                                Chunk cha=iteratoriAlbanianTOT.next();
+                                Chunk che=iteratoriEnglishTOT.next();
+                                pha2.add(cha);
+                                pha2.add(new Chunk(glue2));
+                                pha2.add(che);
+                                pha2.add(c2);
+                            }
+                            else if(!iteratoriAlbanianTOT.hasNext()&&iteratoriEnglishTOT.hasNext()) {
+                                Chunk che=iteratoriEnglishTOT.next();
+                                pha2.add("");
+                                pha2.add(new Chunk(glue2));
+                                pha2.add(che);
+                                pha2.add(c2);
+                            }
+                            else if(iteratoriAlbanianTOT.hasNext()&&!iteratoriEnglishTOT.hasNext()) { 
+                                Chunk cha=iteratoriAlbanianTOT.next();
+                                pha2.add(cha);
+                                pha2.add(new Chunk(glue2));
+                                pha2.add("");
+                                pha2.add(c2);
+                            }
+                        } 
+                        else{
+                            pha2.add("");
+                            pha2.add(new Chunk(glue2));
+                            pha2.add("");
+                            pha2.add(c2);
+                        }
+                    }
 
                 para2.add(pha2);
 
 
-                Chunk c30=new Chunk("Me këto module",FontFactory.getFont(FontFactory.HELVETICA,12,Font.BOLD));
+                Chunk c30=new Chunk("Sa ovim modulima ",FontFactory.getFont(FontFactory.HELVETICA,12,Font.BOLD));
                 Chunk c31=new Chunk("With the following modules",FontFactory.getFont(FontFactory.HELVETICA,12,Font.BOLD));
                 Chunk c32=new Chunk("\n");
 
-                Chunk c33=new Chunk("të  pjesmarrjes pas ",FontFactory.getFont(FontFactory.HELVETICA,12,Font.BOLD));
-                Chunk c34=new Chunk("Certicate of participation ",FontFactory.getFont(FontFactory.HELVETICA,12,Font.BOLD));
-                Chunk c35=new Chunk("\n");
 
                 pha3.add(c2);
                 pha3.add(c2);
@@ -1705,28 +2268,29 @@ public class Print extends javax.swing.JInternalFrame {
 
                 
                 pha4.add(c2);
-                Iterator<Chunk>iteratoria=chunka.iterator();
-                Iterator<Chunk>iteratorie=chunke.iterator();
+                Iterator<Chunk>iteratoriAlbanian=chunkAlbanian.iterator();
+                Iterator<Chunk>iteratoriEnglish=chunkEnglish.iterator();
+            
                 for(int j=0;j<12;j++){
-                    if(iteratoria.hasNext()||iteratorie.hasNext()){
+                    if(iteratoriAlbanian.hasNext()||iteratoriEnglish.hasNext()){
                         
-                        if(iteratoria.hasNext()&&iteratorie.hasNext()) {  
-                            Chunk cha=iteratoria.next();
-                            Chunk che=iteratorie.next();
+                        if(iteratoriAlbanian.hasNext()&&iteratoriEnglish.hasNext()) {  
+                            Chunk cha=iteratoriAlbanian.next();
+                            Chunk che=iteratoriEnglish.next();
                             pha4.add(cha);
                             pha4.add(new Chunk(glue2));
                             pha4.add(che);
                             pha4.add(c42);
                         }
-                        else if(!iteratoria.hasNext()&&iteratorie.hasNext()) {
-                            Chunk che=iteratorie.next();
+                        else if(!iteratoriAlbanian.hasNext()&&iteratoriEnglish.hasNext()) {
+                            Chunk che=iteratoriEnglish.next();
                             pha4.add("");
                             pha4.add(new Chunk(glue2));
                             pha4.add(che);
                             pha4.add(c42);
                         }
-                        else if(iteratoria.hasNext()&&!iteratorie.hasNext()) { 
-                            Chunk cha=iteratoria.next();
+                        else if(iteratoriAlbanian.hasNext()&&!iteratoriEnglish.hasNext()) { 
+                            Chunk cha=iteratoriAlbanian.next();
                             pha4.add(cha);
                             pha4.add(new Chunk(glue2));
                             pha4.add("");
@@ -1755,11 +2319,11 @@ public class Print extends javax.swing.JInternalFrame {
                 para4.add(pha4);
 
 
-                Chunk c50=new Chunk("Drejtori Ekzekutiv :",FontFactory.getFont(FontFactory.HELVETICA,10));
+                Chunk c50=new Chunk("Izvršni Direktor :",FontFactory.getFont(FontFactory.HELVETICA,10));
                 Chunk c51=new Chunk("Chief Executive Officer :",FontFactory.getFont(FontFactory.HELVETICA,10));
                 Chunk c52=new Chunk("\n");
 
-                Chunk c53=new Chunk("Administratori i trajnimeve :",FontFactory.getFont(FontFactory.HELVETICA,10));
+                Chunk c53=new Chunk("Administrator obuke :",FontFactory.getFont(FontFactory.HELVETICA,10));
                 Chunk c54=new Chunk("Training registar :",FontFactory.getFont(FontFactory.HELVETICA,10));
                 Chunk c55=new Chunk("\n");
 
@@ -1793,7 +2357,7 @@ public class Print extends javax.swing.JInternalFrame {
                 para6.add(pha6);
 
 
-                Chunk c70=new Chunk("Data | Date : " + today,FontFactory.getFont(FontFactory.HELVETICA,10));
+                Chunk c70=new Chunk("Datum | Date : " + today,FontFactory.getFont(FontFactory.HELVETICA,10));
                 Chunk c71=new Chunk(tpid+"   "+ idn,FontFactory.getFont(FontFactory.HELVETICA,10));
                 Chunk c72=new Chunk("\n");
                 Chunk c73=new Chunk(chunk ,FontFactory.getFont(FontFactory.HELVETICA,9));
@@ -1826,6 +2390,7 @@ public class Print extends javax.swing.JInternalFrame {
               
             }    
             document.close();
+            
             JOptionPane.showMessageDialog(null,"U ruajt me sukses");
         }catch(Exception e){
             
@@ -1834,74 +2399,92 @@ public class Print extends javax.swing.JInternalFrame {
     }
     
     private void jLabel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MouseClicked
-      
-        if(langcombo.getSelectedItem().toString().equals("ALB-ENG")){
-            if(tbl.getModel()==ptm&&ptm.getRowCount()>=1&&!emritxtf.getText().trim().equals("")&&!idnumtxtf.getText().trim().equals("")&&!mbiemritxtf.getText().trim().equals("")){
-               try{ 
-                String chunk="";
-                if(extratxtf.getText().trim().toCharArray().length>95){
-                    throw new AppException("Numri maksimal i karaktereve të lejuara është 95");
-                }
-                else if(!extratxtf.getText().trim().equals("")&&extratxtf.getText().trim().toCharArray().length<=95){
-                    chunk=extratxtf.getText().trim();
-                }
-                
-                shtypPDF(chunk);
-                pathi="";
-                try {
-                    shtoPrintLog();
-                } catch (AppException ex) {
-                    Logger.getLogger(Print.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                label.setIcon(null);
-               }catch(AppException ae){
-                   JOptionPane.showMessageDialog(null, "Numri maksimal i karaktereve të lejuara është 95");
-               }
-            }
-            else if(tbl.getModel()==tptmm){
-                JOptionPane.showMessageDialog(null, "Zgjidh njerin nga trajnimet");
-            }
-            else if(tbl.getModel()==ptm&&ptm.getRowCount()<1){
-                JOptionPane.showMessageDialog(null, "Nuk ka pjesmarrës në këtë trajnim");
-            }   
-            else if(tbl.getModel()==ptm&&ptm.getRowCount()>=1&&emritxtf.getText().trim().equals("")&&idnumtxtf.getText().trim().equals("")&&mbiemritxtf.getText().trim().equals("")){
-                JOptionPane.showMessageDialog(null, "Zgjidh njerin nga pjesmarresit");
-            }
-       }
-       else if(langcombo.getSelectedItem().toString().equals("SRB-ENG")){
-           if(tbl.getModel()==ptm&&ptm.getRowCount()>=1&&!emritxtf.getText().trim().equals("")&&!idnumtxtf.getText().trim().equals("")&&!mbiemritxtf.getText().trim().equals("")){
-               try{
-               String chunk="";
-               if(extratxtf.getText().trim().toCharArray().length>95){
-                   throw new AppException("Numri maksimal i karaktereve të lejuara është 95");
-               }
-               else if(!extratxtf.getText().trim().equals("")&&extratxtf.getText().trim().toCharArray().length<=95){
-                   chunk=extratxtf.getText().trim();
-               }
-               shtypPDFSRB(chunk);
-               pathi="";
-               try {
-                   shtoPrintLog();
-               } catch (AppException ex) {
-                   Logger.getLogger(Print.class.getName()).log(Level.SEVERE, null, ex);
-               }
-               label.setIcon(null);
-               }catch(AppException ae){
-                   JOptionPane.showMessageDialog(null, "Numri maksimal i karaktereve të lejuara është 95");
-                }
-            }
-            else if(tbl.getModel()==tptmm){
-                JOptionPane.showMessageDialog(null, "Zgjidh njerin nga trajnimet");
-            }
-            else if(tbl.getModel()==ptm&&ptm.getRowCount()<1){
-                JOptionPane.showMessageDialog(null, "Nuk ka pjesmarrës në këtë trajnim");
-            }   
-            else if(tbl.getModel()==ptm&&ptm.getRowCount()>=1&&emritxtf.getText().trim().equals("")&&idnumtxtf.getText().trim().equals("")&&mbiemritxtf.getText().trim().equals("")){
-                JOptionPane.showMessageDialog(null, "Zgjidh njerin nga pjesmarresit");
-            } 
-           
-       }
-      
+        
+        
+        JFileChooser chooser = new JFileChooser(); 
+        chooser.setCurrentDirectory(new java.io.File("."));
+        chooser.setDialogTitle("Chooser");
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        String directory="";
+        //
+        // disable the "All files" option.
+        //
+        chooser.setAcceptAllFileFilterUsed(false);
+        //    
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) { 
+          directory=chooser.getSelectedFile().toString()+"\\";
+          
+            if(langcombo.getSelectedItem().toString().equals("ALB-ENG")){
+              if(tbl.getModel()==ptm&&ptm.getRowCount()>=1&&!emritxtf.getText().trim().equals("")&&!idnumtxtf.getText().trim().equals("")&&!mbiemritxtf.getText().trim().equals("")){
+                 try{ 
+                  String chunk="";
+                  if(extratxtf.getText().trim().toCharArray().length>95){
+                      throw new AppException("Numri maksimal i karaktereve të lejuara është 95");
+                  }
+                  else if(!extratxtf.getText().trim().equals("")&&extratxtf.getText().trim().toCharArray().length<=95){
+                      chunk=extratxtf.getText().trim();
+                  }
+
+                  shtypPDF(chunk,directory);
+                  pathi="";
+                  try {
+                      shtoPrintLog();
+                  } catch (AppException ex) {
+                      Logger.getLogger(Print.class.getName()).log(Level.SEVERE, null, ex);
+                  }
+                  label.setIcon(null);
+                 }catch(AppException ae){
+                     JOptionPane.showMessageDialog(null, "Numri maksimal i karaktereve të lejuara është 95");
+                 }
+              }
+              else if(tbl.getModel()==tptmm){
+                  JOptionPane.showMessageDialog(null, "Zgjidh njerin nga trajnimet");
+              }
+              else if(tbl.getModel()==ptm&&ptm.getRowCount()<1){
+                  JOptionPane.showMessageDialog(null, "Nuk ka pjesmarrës në këtë trajnim");
+              }   
+              else if(tbl.getModel()==ptm&&ptm.getRowCount()>=1&&emritxtf.getText().trim().equals("")&&idnumtxtf.getText().trim().equals("")&&mbiemritxtf.getText().trim().equals("")){
+                  JOptionPane.showMessageDialog(null, "Zgjidh njerin nga pjesmarresit");
+              }
+         }
+         else if(langcombo.getSelectedItem().toString().equals("SRB-ENG")){
+             if(tbl.getModel()==ptm&&ptm.getRowCount()>=1&&!emritxtf.getText().trim().equals("")&&!idnumtxtf.getText().trim().equals("")&&!mbiemritxtf.getText().trim().equals("")){
+                 try{
+                 String chunk="";
+                 if(extratxtf.getText().trim().toCharArray().length>95){
+                     throw new AppException("Numri maksimal i karaktereve të lejuara është 95");
+                 }
+                 else if(!extratxtf.getText().trim().equals("")&&extratxtf.getText().trim().toCharArray().length<=95){
+                     chunk=extratxtf.getText().trim();
+                 }
+                 shtypPDFSRB(chunk,directory);
+                 pathi="";
+                 try {
+                     shtoPrintLog();
+                 } catch (AppException ex) {
+                     Logger.getLogger(Print.class.getName()).log(Level.SEVERE, null, ex);
+                 }
+                 label.setIcon(null);
+                 }catch(AppException ae){
+                     JOptionPane.showMessageDialog(null, "Numri maksimal i karaktereve të lejuara është 95");
+                  }
+              }
+              else if(tbl.getModel()==tptmm){
+                  JOptionPane.showMessageDialog(null, "Zgjidh njerin nga trajnimet");
+              }
+              else if(tbl.getModel()==ptm&&ptm.getRowCount()<1){
+                  JOptionPane.showMessageDialog(null, "Nuk ka pjesmarrës në këtë trajnim");
+              }   
+              else if(tbl.getModel()==ptm&&ptm.getRowCount()>=1&&emritxtf.getText().trim().equals("")&&idnumtxtf.getText().trim().equals("")&&mbiemritxtf.getText().trim().equals("")){
+                  JOptionPane.showMessageDialog(null, "Zgjidh njerin nga pjesmarresit");
+              } 
+
+         }
+          
+        }
+        else {
+          JOptionPane.showMessageDialog(null, "Duhet te zgjedhni lokacionin se ku deshironi te ruani file ");
+          }
     }//GEN-LAST:event_jLabel2MouseClicked
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
@@ -1920,8 +2503,22 @@ public class Print extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_ikonaActionPerformed
 
     private void printallbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printallbtnActionPerformed
+        JFileChooser chooser = new JFileChooser(); 
+        chooser.setCurrentDirectory(new java.io.File("."));
+        chooser.setDialogTitle("Chooser");
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        String directory="";
+        //
+        // disable the "All files" option.
+        //
+        chooser.setAcceptAllFileFilterUsed(false);
+        //    
         
-        if(langcombo.getSelectedItem().toString().equals("ALB-ENG")){
+        if(chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION){
+            
+            directory=chooser.getSelectedFile().toString()+"\\";
+            
+            if(langcombo.getSelectedItem().toString().equals("ALB-ENG")){
             
             
             if(tbl.getModel()==ptm&&ptm.getRowCount()<1){
@@ -1936,7 +2533,7 @@ public class Print extends javax.swing.JInternalFrame {
                 else if(!extratxtf.getText().trim().equals("")&&extratxtf.getText().trim().toCharArray().length<=95){
                     chunk=extratxtf.getText().trim();
                 }
-                shtypPDF2(chunk);
+                shtypPDF2(chunk,directory);
                 pathi="";
                 label.setIcon(null);
                 }catch(AppException ae){
@@ -1966,7 +2563,7 @@ public class Print extends javax.swing.JInternalFrame {
                 else if(!extratxtf.getText().trim().equals("")&&extratxtf.getText().trim().toCharArray().length<=95){
                     chunk=extratxtf.getText().trim();
                 }
-                shtypPDF2SRB(chunk);
+                shtypPDF2SRB(chunk,directory);
                 pathi="";
                 label.setIcon(null);
                 }catch(AppException ae){
@@ -1984,6 +2581,12 @@ public class Print extends javax.swing.JInternalFrame {
             } 
            
        }
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Duhet te zgjedhni lokacionin se ku deshironi te ruani file ");
+        }
+        
+        
     }//GEN-LAST:event_printallbtnActionPerformed
     
     
