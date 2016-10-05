@@ -1205,6 +1205,10 @@ PersonalNumberManager pnm;
             throw new AppException("Shkruaje emrin e pjesëmarrësit.");
         else if(surnametxtf.getText().trim().isEmpty())
             throw new AppException("Shkruaje mbiemrin e pjesëmarrësit.");
+        else if(sexcombo.getSelectedIndex()==0)
+            throw new AppException("Të zgjidhët gjinija e pjesëmarrësit.");
+        else if(birthDate.getDate()==null)
+            throw new AppException("Të shkruhet data e lindjës së pjesëmarrësit.");
         else if(trainingprocesstbl.getModel()==trainerEtmm)
             checkTTevaluation();
         else 
@@ -1273,6 +1277,10 @@ PersonalNumberManager pnm;
             throw new AppException("Shkruaje emrin e pjesëmarrësit.");
         else if(surnametxtf.getText().trim().isEmpty())
             throw new AppException("Shkruaje mbiemrin e pjesëmarrësit.");
+        else if(sexcombo.getSelectedIndex()==0)
+            throw new AppException("Të zgjidhët gjinija e pjesëmarrësit.");
+        else if(birthDate.getDate()==null)
+            throw new AppException("Të shkruhet data e lindjës së pjesëmarrësit.");
         else if(trainingprocesstbl.getModel()==trainerEtmm)
             checkTTevaluation();
         else if(trainingprocesstbl.getModel()==trainingptmm)
