@@ -23,4 +23,5 @@ public interface UserInterface {
     void changeLoginPassword(Users user,String password);
     int getNumOfLogins(Users user);
     void deleteUser(Users user);
+    void setUserPassword(Users useri);
 }

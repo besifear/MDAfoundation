@@ -262,7 +262,7 @@ public class TrainingProcessRepository extends EntMngClass implements TrainingPr
      @Override
     public List<TrainingProcess> findByTrainingIDAsc(String trainingID) {
          Query query=em.createQuery ("SELECT object(tp) FROM TrainingProcess tp WHERE tp.statusi='Active' AND tp.tProcessID LIKE :TrainingProcessID");
-        query.setParameter("TrainingProcessID",trainingID+"%");
+        query.setParameter("TrainingProcessID","%"+trainingID+"%");
         return (List<TrainingProcess>)query.getResultList(); 
     }
     
@@ -333,7 +333,7 @@ public class TrainingProcessRepository extends EntMngClass implements TrainingPr
     
      @Override
     public List<TrainingProcess> findByTitleAsc(String emriI) {
-         Query query=em.createQuery ("SELECT object(tp) FROM TrainingProcess tp,TrainingProject tpro,Training t WHERE tp.statusi='Active' AND tpro.statusi='Active' AND t.statusi='Active' AND  tp.trainingProjectID.tpId=tpro.tpId AND tpro.trainingID.titleOfTrainingAlbanian=t.titleOfTrainingAlbanian AND tpro.trainingID.titleOfTrainingAlbanian LIKE :emr ORDER BY tpro.trainingID.titleOfTrainingAlbanian");
+         Query query=em.createQuery ("SELECT object(tp) FROM TrainingProcess tp, TrainingProject tpro,Training t WHERE tp.statusi='Active' AND tpro.statusi='Active' AND t.statusi='Active' AND  tp.trainingProjectID.tpId=tpro.tpId AND tpro.trainingID.titleOfTrainingAlbanian=t.titleOfTrainingAlbanian AND tpro.trainingID.titleOfTrainingAlbanian LIKE :emr ORDER BY tpro.trainingID.titleOfTrainingAlbanian");
         query.setParameter("emr","%"+emriI+"%");
         return (List<TrainingProcess>)query.getResultList();
         

@@ -252,4 +252,14 @@ public class UserRepository extends EntMngClass implements UserInterface{
             + "DROP USER "+user.getUsername()+";\n"
             + "SELECT 1;\n").getSingleResult();
     }
+
+    @Override
+    public void setUserPassword(Users useri) {
+        em.createNativeQuery("ALTER LOGIN "+useri.getUsername()+" WITH DEFAULT_DATABASE=[master];\n" +
+            "USE [master];\n" +
+            "ALTER LOGIN "+useri.getUsername()+" WITH PASSWORD='12345678';"+ 
+            "USE MDAfondation;\n"+
+            "SELECT 1;\n").getSingleResult();
+        
+    }
 }

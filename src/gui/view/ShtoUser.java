@@ -6,9 +6,11 @@
 package gui.view;
 import static Validation.Validation.TextFieldException;
 import bl.AppException;
+import bl.EntMngClass;
 import bl.UserInterface;
 import bl.UserRepository;
 import ejb.Users;
+import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Image;
 import java.awt.Point;
@@ -24,6 +26,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.swing.JOptionPane;
+import javax.swing.plaf.basic.BasicInternalFrameUI;
 
 /**
  *
@@ -46,8 +49,19 @@ public class ShtoUser extends javax.swing.JInternalFrame {
         em=emm;
         userir=new UserRepository(em);
         initComponents();
+        removeLeftButton();
         addFolderNames();
         CustomCursor();
+    }
+    
+    private void removeLeftButton(){
+        Container pane = ((BasicInternalFrameUI) this.getUI()).getNorthPane();
+        // And remove the button:
+        pane.remove(0);
+        /*
+        // OR make it invisible:
+        pane.getComponent(0).setVisible(false);
+        */
     }
 
     private void clearTxtf1() {
@@ -79,8 +93,6 @@ public class ShtoUser extends javax.swing.JInternalFrame {
         jLabel5 = new javax.swing.JLabel();
         mbyllebtn = new javax.swing.JButton();
         ruajebtn = new javax.swing.JButton();
-
-        setClosable(true);
 
         jLabel1.setText("Username:");
 
@@ -124,7 +136,7 @@ public class ShtoUser extends javax.swing.JInternalFrame {
 
         jLabel7.setText("Pozita:");
 
-        pozitaCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "stafi" }));
+        pozitaCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "stafi", "Administrator" }));
         pozitaCombo.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 pozitaComboKeyPressed(evt);
@@ -414,8 +426,9 @@ public class ShtoUser extends javax.swing.JInternalFrame {
                 userir.create(user);
                 if(user.getPozita().equals("stafi"))
                     userir.createSqlLogin(user.getUsername(),password1txtf.getText().trim());
-                else
-                    userir.createSqlLoginAdministrator(user.getUsername(),password1txtf.getText().trim());
+                else if(user.getPozita().equals("Administrator"))
+                    new UserRepository(new EntMngClass("sa","12","localhost").getEntityManager())
+                            .createSqlLoginAdministrator(user.getUsername(),password1txtf.getText().trim());
             } catch (AppException ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage());
             }

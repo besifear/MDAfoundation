@@ -39,23 +39,12 @@ import ejb.Logs;
 import ejb.Participant;
 
 import ejb.TrainingProcess;
-import ejb.Trainer;
 import ejb.ParticipatingCompanyMember;
 import ejb.ParticipantTeam;
 import ejb.Team;
 import ejb.TTrainerEvaluation;
-import ejb.TrainersTeam;
 import ejb.TrainerTeamCombo;
 import ejb.Users;
-import gui.model.CompanyTableModel;
-import gui.model.ParticipantTableModel;
-
-import gui.model.TrainingProcessTableModel;
-import gui.model.TrainerTableModel;
-import gui.model.ParticipantTeamTableModel;
-import gui.model.ParticipatingCompanyMemberTableModel;
-import gui.model.TeamTableModel;
-import gui.model.TrainerEvaluationTableModel;
 import gui.model.ParticipantTableModelMini;
 import gui.model.TrainerEvaluationTableModelMini;
 import gui.model.TrainingProcessTableModelMini;
@@ -67,48 +56,32 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.nio.file.Paths;
 import java.sql.Time;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceException;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
-import javax.swing.event.CellEditorListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 
 
@@ -216,6 +189,7 @@ PersonalNumberManager pnm;
         emailtxtf.setText("");
         ziptxtf.setText("");
         pozitatxtf.setText("");
+        searchTpTxtf.setText("");
         sexcombo.setSelectedItem("null");
         birthDate.setCalendar(null);
         nametxtf.requestFocus();
@@ -249,10 +223,17 @@ PersonalNumberManager pnm;
     }
     
     private void trainingprocessTabelaLoad(){
-    List<TrainingProcess> list=trainingpir.findAllActive();
-    trainingptmm.add(list);
-    trainingprocesstbl.setModel(trainingptmm);
-    trainingptmm.fireTableDataChanged();
+        List<TrainingProcess> list=trainingpir.findAllActive();
+        trainingptmm.add(list);
+        trainingprocesstbl.setModel(trainingptmm);
+        trainingptmm.fireTableDataChanged();
+    }
+    
+    private void specificTabelaLoad(List<TrainingProcess> databaseList){
+        List<TrainingProcess> list=databaseList;
+        trainingptmm.add(list);
+        trainingprocesstbl.setModel(trainingptmm);
+        trainingptmm.fireTableDataChanged();
     }
     
     private void ProcessClickEvent(){
@@ -273,6 +254,8 @@ PersonalNumberManager pnm;
             }
         });
     }
+    
+    
     
     private void ParticipantClickEvent(){
         participanttbl.addMouseListener(new MouseAdapter() {
@@ -396,7 +379,10 @@ PersonalNumberManager pnm;
        
        Company cc=new Company();
        cc.setName(companytxtf.getText().trim());
-       cc.setCompanytype(typeofcompanycombo.getSelectedItem().toString());
+       if(cc.getName().isEmpty())
+           cc.setCompanytype(typeofcompanycombo.getItemAt(0));
+       else
+           cc.setCompanytype(typeofcompanycombo.getSelectedItem().toString());
        try{
            cc=companyir.findByEverything(cc);
            if (!cc.getStatusi().equals("Active")){
@@ -490,8 +476,6 @@ PersonalNumberManager pnm;
             }
       }
       
-      
-      
       public void setParticipantTxtf(Participant p){
           idnumbertxtf.setText(Long.toString(p.getIDNumber()));
           nametxtf.setText(p.getName());
@@ -512,25 +496,19 @@ PersonalNumberManager pnm;
           typeofcompanycombo.setSelectedItem(c.getCompanytype());
       }
       
-      
-      
-      
-      
-      
-      
-      
-      
-      
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
         instructionLbl = new javax.swing.JLabel();
+        findTpByCombo = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         trainingprocesstbl = new javax.swing.JTable();
         jScrollPane1 = new javax.swing.JScrollPane();
         participanttbl = new javax.swing.JTable();
+        searchTpTxtf = new javax.swing.JTextField();
         typeofcompanycombo = new javax.swing.JComboBox<>();
         companytxtf = new javax.swing.JTextField();
         pozitatxtf = new javax.swing.JTextField();
@@ -560,9 +538,17 @@ PersonalNumberManager pnm;
 
         jPanel1.setLayout(null);
 
+        jLabel1.setText("Kërko Trajnimin në bazë të:");
+        jPanel1.add(jLabel1);
+        jLabel1.setBounds(680, 230, 170, 14);
+
         instructionLbl.setForeground(new java.awt.Color(255, 0, 0));
         jPanel1.add(instructionLbl);
         instructionLbl.setBounds(684, 254, 520, 20);
+
+        findTpByCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Training Code", "Project", "Titulli i Trainimit", "Place" }));
+        jPanel1.add(findTpByCombo);
+        findTpByCombo.setBounds(870, 220, 160, 30);
 
         jScrollPane2.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
@@ -599,6 +585,10 @@ PersonalNumberManager pnm;
 
         jPanel1.add(jScrollPane1);
         jScrollPane1.setBounds(10, 280, 660, 190);
+
+        searchTpTxtf.setBackground(new java.awt.Color(225, 225, 225));
+        jPanel1.add(searchTpTxtf);
+        searchTpTxtf.setBounds(1040, 220, 130, 30);
 
         typeofcompanycombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Null", "Public Institutions", "International Organizations", "Non-Govermental", "Private Businesses", "Individual" }));
         jPanel1.add(typeofcompanycombo);
@@ -779,7 +769,7 @@ PersonalNumberManager pnm;
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         trainerEtmm.removeAll();
         trainingcodetxtf.setText("");
-        trainingprocessTabelaLoad();
+        searchTpMethod(searchTpTxtf);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void shtobtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_shtobtnActionPerformed
@@ -890,10 +880,12 @@ PersonalNumberManager pnm;
     private javax.swing.JTextField citytxtf;
     private javax.swing.JTextField companytxtf;
     private javax.swing.JTextField emailtxtf;
+    private javax.swing.JComboBox<String> findTpByCombo;
     private javax.swing.JButton fshijbtn;
     private javax.swing.JTextField idnumbertxtf;
     private javax.swing.JLabel instructionLbl;
     private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -904,6 +896,7 @@ PersonalNumberManager pnm;
     private javax.swing.JButton pastrobtn;
     private javax.swing.JTextField phonetxtf;
     private javax.swing.JTextField pozitatxtf;
+    private javax.swing.JTextField searchTpTxtf;
     private javax.swing.JComboBox<String> sexcombo;
     private javax.swing.JButton shtobtn;
     private javax.swing.JTextField statetxtf;
@@ -1115,123 +1108,10 @@ PersonalNumberManager pnm;
         }
     }
     
-    private void pasivizoTevaluation(Iterator<TTrainerEvaluation> iterator) throws AppException{
-        TTrainerEvaluation ttetemp;
-        while(iterator.hasNext()){
-            ttetemp=iterator.next();
-            if(!ttetemp.getStatusi().equals("Passive")){
-                ttetemp.setStatusi("Passive");
-                trainerevir.edit(ttetemp);
-            }     
-        }
-    }
-
-    private void pasivizoCompanyAndFriends(TrainingProcess tptemp,Participant partemp) throws AppException {
-        CTPcombo ctptemp=ctpcir.findCTPcomboTpParticipantForDelete(tptemp,partemp);
-        if(participatingcompanymemberir.findByCTPcomboForDelete(ctptemp).size()==1)
-            if(!ctptemp.getStatusi().equals("Passive")){
-                ctptemp.setStatusi("Passive");
-                ctpcir.edit(ctptemp);
-            }
-        /* Pasivizimi  i Kompanisë */
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
-        if (participatingcompanymemberir.findByCompany(ctptemp.getCompanyID()).isEmpty()){
-            if(ctptemp.getCompanyID().getStatusi().equals("Passive")){
-                ctptemp.getCompanyID().setStatusi("Passive");
-                companyir.edit(c);
-            }
-        /* Pasivizimi i CTPcombove*/
-            Iterator<CTPcombo> iteratori=ctpcir.findByCompany(ctptemp.getCompanyID()).iterator();
-            CTPcombo temp;
-            while(iteratori.hasNext()){
-                temp=iteratori.next();
-                if(!temp.getStatusi().equals("Passive")){
-                    temp.setStatusi("Active");
-                } 
-            }
-        }
-    }
-    
-    private void pasivizoParticipantTeam(TrainingProcess tptemp, Participant partemp) throws AppException {
-        List<ParticipantTeam> lista=(List)tptemp.getTeamID().getParticipantTeamCollection();
-        ArrayList<ParticipatingCompanyMember> pcmss=new ArrayList<ParticipatingCompanyMember>();
-        for (ParticipantTeam part : lista){
-            if(part.getPcmId().getParticipantID().equals(partemp)){
-                lista.remove(part);
-                break;
-            }
-        
-            
-        
-        for (int i=0;i<lista.size();i++){
-            pcmss.add(lista.get(i).getPcmId());
-        }
-        }
-        Team te;
-        try{
-            if(!pcmss.isEmpty())
-                te=teamir.findByParticipants(pcmss);
-            else
-                throw new NoResultException();
-        }catch(NoResultException nre){
-            te=new Team();
-            for (ParticipatingCompanyMember temppcm : pcmss){
-                ParticipantTeam pt=new ParticipantTeam();
-                pt.setPcmId(temppcm);
-                pt.setTeamID(te);
-                participantteamir.create(pt);
-            }
-        }
-        
-        //Pasivizimi i teamit të vjetër në qoftë se nuk ka asnje trainingProcess
-        Team old =tptemp.getTeamID();
-        tptemp.setTeamID(te);
-        trainingpir.edit(tptemp);
-        if (trainingpir.findByTeam(old.getTeamID()).isEmpty()){
-            if(!old.getStatusi().equals("Passive")){
-                old.setStatusi("Passive");
-                teamir.edit(old);
-                List<ParticipantTeam>pteams=(List)old.getParticipantTeamCollection();
-                for (ParticipantTeam tempi : pteams){
-                    if(!tempi.getStatusi().equals("Passive")){
-                        tempi.setStatusi("Passive");
-                        participantteamir.edit(tempi);
-                    }
-                }
-            }
-        }        
-    }
-
-    private void pasivizoPCM(TrainingProcess tptemp, Participant partemp) throws AppException {
-        try{
-                //PASIVIizo pcmat tu i lyp cilat jon n'team qe sjon ne trainingProcess
-            ParticipatingCompanyMember pcmtempi=participatingcompanymemberir.findBytTpParticipantForDelete(tptemp,partemp);
-            if(participantteamir.findByPCM(pcmtempi).isEmpty()){
-                if(!pcmtempi.getStatusi().equals("Passive")){
-                    pcmtempi.setStatusi("Passive");
-                    participatingcompanymemberir.edit(pcmtempi);
-                }
-            }
-        }catch(NoResultException nre){
-        }
-    }
-    // Pasivizimi i pjesëmarrësit 
-        
-    
-        private void pasivizoParticipant(Participant partemp) throws AppException {
-            try{
-                if(participatingcompanymemberir.findByParticipant(partemp).isEmpty()){
-                    if(!partemp.getStatusi().equals("Passive")){
-                        partemp.setStatusi("Passive");
-                        participantir.edit(partemp);
-                    }
-                }
-            }catch(NoResultException nre){
-            }
-        }
-
     private void checkParticipantForm(){
         try{
+            typeofcompanycombo.setVisible(!companytxtf.getText().trim().isEmpty());
+            
             ArrayList<TTrainerEvaluation> newTTevaluation=new ArrayList<TTrainerEvaluation>();;
             tcm.checkValidInput();
             if(!tcm.getTrainingCode().equals(tcm.getLastTrainingCode())){
@@ -1421,7 +1301,55 @@ PersonalNumberManager pnm;
         JComboBoxListener(sexcombo);
         JComboBoxListener(typeofcompanycombo);
         JDateChooserFocusListener(birthDate);
+        TxtFSearchTpDocumentListener(searchTpTxtf);
+        JComboSearchTpDocumentListener(findTpByCombo);
     }
+    
+    private void searchTpMethod(JTextField target){
+        if(trainingprocesstbl.getModel()==trainingptmm){
+                    if(!target.getText().trim().isEmpty()){
+                        String teksti=target.getText();
+                        //Project, Titulli i Trainimit, Place  
+                        switch(findTpByCombo.getSelectedItem().toString()){
+                            case "Training Code":
+                                specificTabelaLoad(trainingpir.findByTrainingIDAsc(teksti));
+                                break;
+                            case "Project":
+                                specificTabelaLoad(trainingpir.findByProjectAsc(teksti));
+                                break;
+                            case "Titulli i Trainimit":
+                                specificTabelaLoad(trainingpir.findByTitleAsc(teksti));
+                                break;
+                            case "Place":
+                                specificTabelaLoad(trainingpir.findByVendiAsc(teksti));
+                                break;
+                        }
+                    }
+                    else{
+                        trainingprocessTabelaLoad();
+                    }
+                }
+    }
+    
+     private void TxtFSearchTpDocumentListener(JTextField target){
+         target.getDocument().addDocumentListener(new DocumentListener(){
+             @Override
+             public void insertUpdate(DocumentEvent de){
+                searchTpMethod(target);
+            }
+             
+            @Override
+            public void changedUpdate(DocumentEvent de){
+                searchTpMethod(target);
+            }
+            
+            @Override
+            public void removeUpdate(DocumentEvent de){
+                searchTpMethod(target);
+            }
+         });
+         
+     }
     
      private void ParticipantFormDocumentListener(JTextField target){
         target.getDocument().addDocumentListener(new DocumentListener() {
@@ -1683,5 +1611,36 @@ PersonalNumberManager pnm;
             }
         }
         return newPcms;
+    }
+
+    private void JComboSearchTpDocumentListener(JComboBox target) {
+        target.addActionListener(new ActionListener(){
+             @Override
+             public void actionPerformed(ActionEvent ae) {
+                 trainerEtmm.fireTableDataChanged();
+                 searchTpMethod(searchTpTxtf);
+             }
+         });
+         target.addItemListener(new ItemListener(){
+             @Override
+             public void itemStateChanged(ItemEvent ie) {
+                trainerEtmm.fireTableDataChanged();
+                searchTpMethod(searchTpTxtf);
+             }
+         });
+         
+         target.addFocusListener(new FocusListener(){
+             @Override
+             public void focusGained(FocusEvent fe) {
+                trainerEtmm.fireTableDataChanged();
+                searchTpMethod(searchTpTxtf);
+             }
+
+             @Override
+             public void focusLost(FocusEvent fe) {
+                trainerEtmm.fireTableDataChanged();
+                searchTpMethod(searchTpTxtf);
+             }
+         });
     }
 }

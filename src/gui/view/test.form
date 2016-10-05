@@ -69,9 +69,9 @@
             </MenuItem>
           </SubComponents>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="MneaxhoUser">
+        <Menu class="javax.swing.JMenu" name="UserMenu">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Menaxho Userat"/>
+            <Property name="text" type="java.lang.String" value="Userat"/>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="ShtoUserMI">
@@ -101,7 +101,7 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="fshijeUserMI">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Fshij&#xeb; User"/>
+                <Property name="text" type="java.lang.String" value="Menaxho User"/>
               </Properties>
               <Events>
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="fshijeUserMIMouseClicked"/>
