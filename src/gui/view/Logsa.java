@@ -7,6 +7,7 @@ import bl.LogsRepository;
 import ejb.Users;
 import ejb.TrainingProcess;
 import gui.model.LogsTableModel;
+import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Image;
 import java.awt.Point;
@@ -28,6 +29,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableColumnModelListener;
+import javax.swing.plaf.basic.BasicInternalFrameUI;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
@@ -49,11 +51,13 @@ public class Logsa extends javax.swing.JInternalFrame {
         logstm=new LogsTableModel(em);
         this.setLocation(15,147);
         initComponents();
+        removeLeftButton();
         lTabelaLoad();
         LogsTabelaMoveKey();
         setColWidth();
         addFolderNames();
         CustomCursor();
+        
         
         searchtxtf.getDocument().addDocumentListener(new DocumentListener(){
         @Override
@@ -70,8 +74,21 @@ public class Logsa extends javax.swing.JInternalFrame {
         public void changedUpdate(DocumentEvent e) {
             kerkologs();
         }
+          });
         
-                public void kerkologs(){
+    }
+    
+    private void removeLeftButton(){
+        Container pane = ((BasicInternalFrameUI) this.getUI()).getNorthPane();
+        // And remove the button:
+        pane.remove(0);
+        /*
+        // OR make it invisible:
+        pane.getComponent(0).setVisible(false);
+        */
+    }
+    
+    public void kerkologs(){
                     if(searchcombo.getSelectedItem().equals("Useri")){
                     if(orderbycombo.getSelectedItem().equals("Rritëse") && searchtxtf.getText().equals(""))
                         OrderByUserTabelaLoadAsc();
@@ -96,9 +113,6 @@ public class Logsa extends javax.swing.JInternalFrame {
                     }
 
                 }
-          });
-        
-    }
 
     
     @SuppressWarnings("unchecked")
@@ -116,7 +130,6 @@ public class Logsa extends javax.swing.JInternalFrame {
         background = new javax.swing.JLabel();
 
         setClosable(true);
-        setIconifiable(true);
         setTitle("LOGS");
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());

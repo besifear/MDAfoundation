@@ -85,7 +85,7 @@ public class test extends javax.swing.JFrame {
         helpMenu = new javax.swing.JMenu();
         contentMenuItem = new javax.swing.JMenuItem();
         aboutMenuItem = new javax.swing.JMenuItem();
-        MneaxhoUser = new javax.swing.JMenu();
+        UserMenu = new javax.swing.JMenu();
         ShtoUserMI = new javax.swing.JMenuItem();
         logsMI = new javax.swing.JMenuItem();
         costumizableTblMI = new javax.swing.JMenuItem();
@@ -193,7 +193,7 @@ public class test extends javax.swing.JFrame {
 
         menuBar.add(helpMenu);
 
-        MneaxhoUser.setText("Menaxho Userat");
+        UserMenu.setText("Userat");
 
         ShtoUserMI.setText("Shto User");
         ShtoUserMI.addActionListener(new java.awt.event.ActionListener() {
@@ -201,7 +201,7 @@ public class test extends javax.swing.JFrame {
                 ShtoUserMIActionPerformed(evt);
             }
         });
-        MneaxhoUser.add(ShtoUserMI);
+        UserMenu.add(ShtoUserMI);
 
         logsMI.setText("Logs");
         logsMI.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -214,7 +214,7 @@ public class test extends javax.swing.JFrame {
                 logsMIActionPerformed(evt);
             }
         });
-        MneaxhoUser.add(logsMI);
+        UserMenu.add(logsMI);
 
         costumizableTblMI.setText("Costumizable Table");
         costumizableTblMI.addActionListener(new java.awt.event.ActionListener() {
@@ -222,9 +222,9 @@ public class test extends javax.swing.JFrame {
                 costumizableTblMIActionPerformed(evt);
             }
         });
-        MneaxhoUser.add(costumizableTblMI);
+        UserMenu.add(costumizableTblMI);
 
-        fshijeUserMI.setText("Fshijë User");
+        fshijeUserMI.setText("Menaxho User");
         fshijeUserMI.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 fshijeUserMIMouseClicked(evt);
@@ -235,9 +235,9 @@ public class test extends javax.swing.JFrame {
                 fshijeUserMIActionPerformed(evt);
             }
         });
-        MneaxhoUser.add(fshijeUserMI);
+        UserMenu.add(fshijeUserMI);
 
-        menuBar.add(MneaxhoUser);
+        menuBar.add(UserMenu);
 
         exp.setText("Export Report");
 
@@ -276,7 +276,7 @@ public class test extends javax.swing.JFrame {
             fshijeUserMI.setVisible(b);
             logsMI.setVisible(b);
             costumizableTblMI.setVisible(false);
-            MneaxhoUser.setVisible(b);
+            UserMenu.setVisible(b);
     }
     
     public void shtoTrajnim(){
@@ -501,7 +501,9 @@ public class test extends javax.swing.JFrame {
             Logger.getLogger(test.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            new fshijeUserat(new EntMngClass("sa","12","localhost").getEntityManager()).setVisible(true);
+           MenaxhoUserat fsh= new MenaxhoUserat(new EntMngClass("sa","12","localhost").getEntityManager());
+           desktopPane.add(fsh);
+           fsh.setVisible(true);
         } catch (AppException ex) {
             Logger.getLogger(test.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -646,8 +648,8 @@ public class test extends javax.swing.JFrame {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenu MneaxhoUser;
     private javax.swing.JMenuItem ShtoUserMI;
+    private javax.swing.JMenu UserMenu;
     private javax.swing.JMenuItem aboutMenuItem;
     private javax.swing.JLabel background;
     private javax.swing.JMenuItem contentMenuItem;
@@ -664,7 +666,6 @@ public class test extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JLabel kerko;

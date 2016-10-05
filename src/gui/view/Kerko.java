@@ -2068,6 +2068,7 @@ public class Kerko extends javax.swing.JInternalFrame {
                         {
                         Temp = participantir.findByPersonalIDDes(Integer.parseInt(searchtxtf.getText()));
                        }
+                    
                     }
                      
                     if(searchcombo.getSelectedItem().equals("Qytetit")){

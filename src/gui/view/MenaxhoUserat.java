@@ -9,24 +9,37 @@ import com.microsoft.sqlserver.jdbc.SQLServerException;
 import ejb.Logs;
 import ejb.Users;
 import gui.model.UserTableModel;
+import java.awt.Container;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.swing.JOptionPane;
+import javax.swing.plaf.basic.BasicInternalFrameUI;
 
-public class fshijeUserat extends javax.swing.JFrame {
+public class MenaxhoUserat extends javax.swing.JInternalFrame {
 UserTableModel userTM;
 EntityManager em;
 UserInterface userIr;
 LogsInterface logsIr;
-    public fshijeUserat(EntityManager em) {
+    public MenaxhoUserat(EntityManager em) {
         initComponents();
+        removeLeftButton();
         this.setLocation(15,147);
         this.em=em;
         userIr=new UserRepository(this.em);
         logsIr=new LogsRepository(this.em);
         userTM=new UserTableModel();
         usersTabelaLoad();
+    }
+    
+    private void removeLeftButton(){
+        Container pane = ((BasicInternalFrameUI) this.getUI()).getNorthPane();
+        // And remove the button:
+        pane.remove(0);
+        /*
+        // OR make it invisible:
+        pane.getComponent(0).setVisible(false);
+        */
     }
 
     private void usersTabelaLoad(){
@@ -44,8 +57,7 @@ LogsInterface logsIr;
         usersTbl = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        changePasswordTxtf = new javax.swing.JButton();
 
         usersTbl.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -62,7 +74,8 @@ LogsInterface logsIr;
         usersTbl.setShowVerticalLines(false);
         jScrollPane1.setViewportView(usersTbl);
 
-        jButton1.setText("delete user");
+        jButton1.setForeground(new java.awt.Color(255, 51, 51));
+        jButton1.setText("fshije userin");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -76,18 +89,27 @@ LogsInterface logsIr;
             }
         });
 
+        changePasswordTxtf.setText("Restarto Passwordin");
+        changePasswordTxtf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changePasswordTxtfActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(changePasswordTxtf, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jButton1)))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -98,8 +120,9 @@ LogsInterface logsIr;
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
-                    .addComponent(jButton2))
-                .addGap(20, 20, 20))
+                    .addComponent(jButton2)
+                    .addComponent(changePasswordTxtf))
+                .addGap(13, 13, 13))
         );
 
         pack();
@@ -141,7 +164,32 @@ LogsInterface logsIr;
         this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void changePasswordTxtfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changePasswordTxtfActionPerformed
+       try{
+           int index;
+            if((index=usersTbl.getSelectedRow())!=-1){
+                Users useri=userTM.getUsers(index);
+                String[] opcionet={"Po","Jo"};
+                int response = JOptionPane.showOptionDialog(this,
+                "A dëshiron me restartu passwordin e userit : "+useri.getUsername()+" ?","Kujdesë",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
+                null, opcionet, opcionet[0]);
+                if(response==0){
+                useri.setNumOfLogins(0);
+                byte[] passwordi = userIr.kripto(useri.getSalt()+"12345678");
+                useri.setPasswordi(passwordi);
+                userIr.setUserPassword(useri);
+                userIr.edit(useri);
+                JOptionPane.showMessageDialog(this, "Passwordi i userit :"+useri.getUsername()+" është 12345678");
+                }
+            }else throw new AppException("Selekto Userin qe deshiron me i restartu passwordin.");
+        }catch(AppException ae){
+           JOptionPane.showMessageDialog(this,ae.getMessage());
+        }
+    }//GEN-LAST:event_changePasswordTxtfActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton changePasswordTxtf;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JScrollPane jScrollPane1;

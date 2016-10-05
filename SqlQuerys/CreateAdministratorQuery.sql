@@ -28,7 +28,6 @@ USE MDAfondation;
 GRANT DELETE ON [dbo].[Users] TO Administrator;
 USE MDAfondation;
 GRANT DELETE ON [dbo].[Logs] TO Administrator;
-USE MDAfondation;
 
 USE MDAfondation;
 CREATE ROLE Stafi AUTHORIZATION Administrator;
